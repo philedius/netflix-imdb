@@ -1,0 +1,215 @@
+$height: 330px;
+$width: $height * 0.6667;
+$modal-height: 420;
+$max-modal-width: 600px;
+
+$black: #222;
+$primary: #202932;
+$dark-primary: darken($primary, 5%);
+$light-primary: lighten($primary, 20%);
+$secondary: complement($primary);
+$white: #eee;
+$card-menu: transparentize(lighten($primary, 5%), .05);
+
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 0.7rem;
+    text-align: center;
+    color: $white;
+    background-color: $primary;
+}
+
+.modal-container {
+    display: none;
+    position: fixed;
+    background-color: $secondary;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .4);
+}
+
+.modal {
+    z-index: 1;
+    display: flex;
+    text-align: justify;
+    justify-content: center;
+    align-items: stretch;
+    margin: 10% auto;
+    padding: 0;
+    width: 80%;
+    height: $modal-height * 1px;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s
+}
+
+@-webkit-keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+.modal-image {
+    align-items: flex-start;
+    background-size: cover;
+    background-position: center;
+    height: $modal-height * 1px;
+    width: $modal-height * 0.6667px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: $primary;
+    width: 50%;
+    max-width: $max-modal-width;
+}
+
+.modal-header {
+    background-color: $dark-primary;
+    padding: 1rem 2rem;
+
+    h1 { margin: 0; }
+    h2 { margin: .5rem 0 0 0; }
+}
+
+.modal-close-btn {
+    // position: fixed;
+    float: right;
+    font-size: 2rem;
+    margin-left: 1rem;
+}
+
+.modal-close-btn:hover {
+    cursor: pointer;
+}
+
+.modal-year {
+    color: $light-primary;
+}
+
+.modal-description {
+    font-size: 1rem;
+    padding: 0rem 5rem 1rem 1.5em;
+    width: 90%;
+}
+
+
+.modal-plot {
+    font-size: 1rem;
+    padding: 0rem 5rem 1rem 1.5em;
+    width: 90%;
+}
+
+.modal-facts {
+    font-size: 1rem;
+    padding: 0rem 5rem 0rem 1.5em;
+    width: 90%;
+    p {
+        margin: 0;
+    }
+    span {
+        color: desaturate(lighten($light-primary, 20%), 5%);
+    }
+}
+
+.modal-footer {
+    font-size: 1.5rem;
+    background-color: $dark-primary;
+    align-items: flex-end;
+    // padding: 1rem;
+    height: 4rem;
+    line-height: 4rem;
+    img {
+        position: relative;
+        margin-left: 1rem;
+        top: .75rem;
+        height: 2.5rem;
+        // margin-top: .7rem;
+    }
+    .modal-imdb-rating, .modal-metacritic-rating {
+        margin: 1rem 1rem;
+    }
+}
+
+.container {
+    margin: 10rem 2rem;
+    text-align: center;
+}
+
+.flex-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    margin: .5rem .5rem;
+    display: flex;
+    flex-direction: row;
+    width: $width !important;
+    height: $height;
+    background-size: cover;
+    background-position: center center;
+    background-color: $dark-primary;
+}
+
+.card-menu {
+    display: none;
+    justify-content: space-between;
+    flex-direction: column;
+    height: $height;
+    width: 100%;
+    // background-color: rgba(0, 0, 100, .6);
+    color: $white;
+    user-select: none;
+    cursor: default;
+    font-weight: bold;
+}
+
+.info-button {
+    font-size: 1rem;
+    align-items: flex-start;
+    background-blend-mode: screen;
+    background-color: $card-menu;
+    text-transform: uppercase;
+    padding: .5rem;
+    cursor: pointer;
+}
+
+.ratings {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    font-size: 1rem;
+    background-color: $card-menu;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    // padding: .5rem 4rem;
+    img {
+        height: 1.5rem;
+        margin-top: .5rem;
+        margin-right: .5rem;
+    }
+    .imdb-rating {
+        margin-right: 1rem;
+    }
+}
+
+.imdb-rating {
+    align-items: flex-start;
+}
+
+.tomato-rating {
+    align-items: flex-end;
+}
