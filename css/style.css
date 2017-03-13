@@ -24,7 +24,7 @@ body {
   margin: 10% auto;
   padding: 0;
   width: 80%;
-  height: 420px;
+  height: 550px;
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.3s;
   animation-name: animatetop;
@@ -47,11 +47,29 @@ body {
     opacity: 1; } }
 
 .modal-image {
-  align-items: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   background-size: cover;
   background-position: center;
-  height: 420px;
-  width: 280.014px; }
+  height: 550px;
+  width: 366.685px; }
+
+.modal-trailer {
+  height: 140px;
+  width: 400px;
+  margin: 0 auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-transition: height .2s;
+  /* Safari */
+  transition: height .2s; }
+
+.modal-trailer:hover {
+  height: 160px;
+  cursor: pointer; }
 
 .modal-content {
   display: flex;
@@ -59,19 +77,21 @@ body {
   justify-content: space-between;
   background-color: #202932;
   width: 50%;
-  max-width: 600px; }
+  max-width: 700px; }
 
 .modal-header {
   background-color: #161c22;
   padding: 1rem 2rem; }
   .modal-header h1 {
+    font-size: 2.2rem;
     margin: 0; }
   .modal-header h2 {
+    font-size: 1.3rem;
     margin: .5rem 0 0 0; }
 
 .modal-close-btn {
   float: right;
-  font-size: 2rem;
+  font-size: 3.5rem;
   margin-left: 1rem; }
 
 .modal-close-btn:hover {
@@ -80,38 +100,35 @@ body {
 .modal-year {
   color: #485c70; }
 
-.modal-description {
-  font-size: 1rem;
-  padding: 0rem 5rem 1rem 1.5em;
-  width: 90%; }
-
 .modal-plot {
-  font-size: 1rem;
-  padding: 0rem 5rem 1rem 1.5em;
+  font-size: 1.3rem;
+  line-height: 2rem;
+  padding: .5rem 5rem .5rem 1.5em;
   width: 90%; }
 
 .modal-facts {
-  font-size: 1rem;
+  font-size: 1.3rem;
   padding: 0rem 5rem 0rem 1.5em;
   width: 90%; }
   .modal-facts p {
-    margin: 0; }
+    margin: .3rem 0; }
   .modal-facts span {
     color: #7c8fa2; }
 
 .modal-footer {
-  font-size: 1.5rem;
-  background-color: #161c22;
-  align-items: flex-end;
-  height: 4rem;
-  line-height: 4rem; }
+  font-size: 2rem;
+  background-color: #161c22; }
   .modal-footer img {
-    position: relative;
     margin-left: 1rem;
-    top: .75rem;
-    height: 2.5rem; }
+    height: 2.75rem; }
   .modal-footer .modal-imdb-rating, .modal-footer .modal-metacritic-rating {
-    margin: 1rem 1rem; }
+    margin: 1rem 1.5rem; }
+
+.modal-ratings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; }
 
 .container {
   margin: 10rem 2rem;
@@ -124,11 +141,11 @@ body {
   align-items: center; }
 
 .card {
-  margin: .5rem .5rem;
+  margin: .75rem .75rem;
   display: flex;
   flex-direction: row;
-  width: 220.011px !important;
-  height: 330px;
+  width: 266.68px !important;
+  height: 400px;
   background-size: cover;
   background-position: center center;
   background-color: #161c22; }
@@ -137,7 +154,7 @@ body {
   display: none;
   justify-content: space-between;
   flex-direction: column;
-  height: 330px;
+  height: 400px;
   width: 100%;
   color: #eee;
   user-select: none;
@@ -145,28 +162,43 @@ body {
   font-weight: bold; }
 
 .info-button {
-  font-size: 1rem;
+  font-size: 1.3rem;
   align-items: flex-start;
-  background-blend-mode: screen;
   background-color: rgba(42, 54, 66, 0.95);
   text-transform: uppercase;
   padding: .5rem;
+  cursor: pointer; }
+
+.card-trailer {
+  align-items: center;
+  height: 110px;
+  width: 50%;
+  margin: 0 auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-transition: height .2s;
+  /* Safari */
+  transition: height .2s; }
+
+.card-trailer:hover {
+  height: 130px;
   cursor: pointer; }
 
 .ratings {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  font-size: 1rem;
+  font-size: 1.3rem;
   background-color: rgba(42, 54, 66, 0.95);
-  height: 2.5rem;
-  line-height: 2.5rem; }
+  height: 3rem;
+  line-height: 3rem; }
   .ratings img {
-    height: 1.5rem;
+    height: 2rem;
     margin-top: .5rem;
-    margin-right: .5rem; }
-  .ratings .imdb-rating {
     margin-right: 1rem; }
+  .ratings .imdb-rating {
+    margin-right: 2rem; }
 
 .imdb-rating {
   align-items: flex-start; }

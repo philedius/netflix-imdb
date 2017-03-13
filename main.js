@@ -2,52 +2,68 @@ $(document).ready(function() {
 
     imdbLogo = 'https://d2r1vs3d9006ap.cloudfront.net/public/uploaded_images/9999862/imdbsquarelogo_large.png';
     metacriticLogo = 'http://i.imgur.com/ThgZkgC.png';
+    playButton = 'http://i.imgur.com/Mlij2TP.png';
     info = [];
     var amount = 100;
 
     /**
      *      GET LIST OF FILMS AND REQUEST DATA FROM OMDBAPI
      */
-    $.getJSON("movies.json", function(json) {
+    $.getJSON("moviestrailers.json", function(json) {
         info = json.data;
         // for (var i = 0; i < json.data.length; i++) {
-            // $.ajax({
-            //     url: 'https://www.omdbapi.com/?t=' + json.data[i] + '&type=movie',
-            //     type: 'GET',
-            //     dataType: 'json',
-            //     success: (function(data) {
-            //         if (data.Response === 'True')
-            //             if (data.Poster !== 'N/A') {
-            //
-            //                 info.push(data);
-            //             }
-            //
-            //     }),
-            //     error: (function() {
-            //         console.log('ERROR! ERROR! ERROR!');
-            //     })
-            // });
+        //     q = info[i].Title.replace(' ', '+');
+        //     $.ajax({
+        //         // url: 'https://www.omdbapi.com/?t=' + json.data[i] + '&type=movie',
+        //         url: 'https://www.googleapis.com/youtube/v3/search?part=id&maxResults=1&q='+ q + 'trailer&key=AIzaSyC6akvC-Cwt0No3IO7uLDPkS8DCgCFIpIQ',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         async: false,
+        //         success: (function(data) {
+        //             // if (data.Response === 'True')
+        //             //     if (data.Poster !== 'N/A') {
+        //             //
+        //             //         info.push(data);
+        //             //     }
+        //             // console.log(data)
+        //             if (data.items[0]) {
+        //                 youtubeTrailerLink = 'https://www.youtube.com/watch?v=' + data.items[0].id.videoId;
+        //                 info[i].Trailer = youtubeTrailerLink;
+        //             } else {
+        //                 info[i].Trailer = 'N/A';
+        //                 console.log(i, info[i].Title)
+        //             }
+        //             // console.log(youtubeTrailerLink)
+        //         }),
+        //         error: (function() {
+        //             console.log('ERROR! ERROR! ERROR!');
+        //         })
+        //     });
         // }
     });
+
+    addCard = function(item, id) {
+        $('.flex-grid').append(
+            `<div class="card" id="${id}" style="background-image: url(${item.Poster})">
+                <div class="card-menu" id="${id}">
+                    <div class="info-button" id="${id}">more information</div>
+                    <a style="display: block;" target="_blank" href="${item.Trailer}"><div class="card-trailer" style="background-image: url(${playButton})"></div></a>
+                    <div class="ratings">
+                    <img src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
+                    <img src="${metacriticLogo}"/><span class="metacritic-rating">${item.Metascore}</span>
+                    </div>
+                </div>
+            </div>`);
+    }
 
     /**
      *      POPULATE PAGE AFTER AJAX CALLS
      */
     $(document).ajaxStop(function() {
-        console.log(info);
         var numItems = 0;
         for (var i = 0; i < amount; i++) {
             item = info[i];
-            $('.flex-grid').append(
-                `<div class="card" id="${i}" style="background-image: url(${item.Poster})">
-                    <div class="card-menu" id="${i}">
-                    <div class="info-button" id="${i}">more information</div>
-                    <div class="ratings">
-                    <img src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
-                    <img src="${metacriticLogo}"/><span class="metacritic-rating">${item.Metascore}</span>
-                    </div>
-                    </div>
-                    </div>`);
+            addCard(item, i);
 
         }
         numItems += amount;
@@ -70,7 +86,9 @@ $(document).ready(function() {
             itemId = $(this).attr('id');
             item = info[itemId];
             $('.modal-container').find('.modal').append(
-                `<div class="modal-image" style="background-image: url(${item.Poster})"></div>
+                `<div class="modal-image" style="background-image: url(${item.Poster})">
+                    <a style="display: block;" target="_blank" href="${item.Trailer}"><div class="modal-trailer" style="background-image: url(${playButton})"></div></a>
+                </div>
                     <div class="modal-content">
                         <div class="modal-header">
                             <span class="modal-close-btn">&times;</span>
@@ -82,6 +100,7 @@ $(document).ready(function() {
                         <p>${item.Plot}</p>
                         </div>
                         <div class="modal-facts">
+
                         <p>Runtime: <span>${item.Runtime}</span></p>
                         <p>Director: <span>${item.Director}</span></p>
                         <p>Writer: <span>${item.Writer}</span></p>
@@ -89,8 +108,10 @@ $(document).ready(function() {
                         </div>
 
                         <div class="modal-footer">
-                            <img src="${imdbLogo}"/><span class="modal-imdb-rating">${item.imdbRating}</span>
-                            <img src="${metacriticLogo}"/><span class="modal-metacritic-rating">${item.Metascore}</span>
+                            <div class="modal-ratings">
+                                <img src="${imdbLogo}"/><span class="modal-imdb-rating">${item.imdbRating}</span>
+                                <img src="${metacriticLogo}"/><span class="modal-metacritic-rating">${item.Metascore}</span>
+                            </div>
                         </div>
                     </div>
                     `);
@@ -119,16 +140,7 @@ $(document).ready(function() {
                    if (item.Poster === 'N/A') {
                        item.Poster = 'http://i.imgur.com/eHaEk1a.png';
                    }
-                   $('.flex-grid').append(
-                       `<div class="card" id="${i}" style="background-image: url(${item.Poster})">
-                           <div class="card-menu" id="${i}">
-                           <div class="info-button" id="${i}">more information</div>
-                           <div class="ratings">
-                           <img src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
-                           <img src="${metacriticLogo}"/><span class="metacritic-rating">${item.Metascore}</span>
-                           </div>
-                           </div>
-                           </div>`);
+                   addCard(item, i);
 
                }
                numItems += amount;
