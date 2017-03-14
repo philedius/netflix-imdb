@@ -47,7 +47,7 @@ $(document).ready(function() {
             `<div class="card" id="${id}" style="background-image: url(${item.Poster})">
                 <div class="card-menu" id="${id}">
                     <div class="info-button" id="${id}">more information</div>
-                    <a style="display: block;" target="_blank" href="${item.Trailer}"><div class="card-trailer" style="background-image: url(${playButton})"></div></a>
+                    <div class="card-trailer" id="${id}" style="background-image: url(${playButton})"></div>
                     <div class="ratings">
                     <img src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
                     <img src="${metacriticLogo}"/><span class="metacritic-rating">${item.Metascore}</span>
@@ -87,7 +87,7 @@ $(document).ready(function() {
             item = info[itemId];
             $('.modal-container').find('.modal').append(
                 `<div class="modal-image" style="background-image: url(${item.Poster})">
-                    <a style="display: block;" target="_blank" href="${item.Trailer}"><div class="modal-trailer" style="background-image: url(${playButton})"></div></a>
+                    <div class="modal-trailer" id="${itemId}" style="background-image: url(${playButton})"></div>
                 </div>
                     <div class="modal-content">
                         <div class="modal-header">
@@ -116,15 +116,47 @@ $(document).ready(function() {
                     </div>
                     `);
 
-            $('.modal-container').css('display', 'block');
+            $('.modal-container').css('display', 'block').fadeIn();
         });
 
         /**
          *      HANDLE MODAL CLOSE BUTTON
          */
         $('.modal-container').on('click', '.modal-close-btn', function() {
-            $(this).parent().parent().parent().parent().css('display', 'none');
-            $(this).parent().parent().parent().empty();
+            // $(this).parent().parent().parent().fadeOut();
+            $(this).parent().parent().parent().parent().fadeOut(function() {
+                $(this).css('display', 'none');
+                $(this).children(':first').empty();
+            });
+            // $(this).parent().parent().parent().parent().fadeOut();
+        });
+
+        /**
+         *      HANDLE TRAILER
+         */
+
+         $('.flex-grid').on('click', '.card-trailer', function() {
+            $('.trailer').fadeIn();
+            id = $(this).attr('id');
+            youtubeId = info[id].Trailer.slice(-11);
+            $('.trailer iframe').attr('src', 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1');
+        });
+
+        $('.modal-container').on('click', '.modal-trailer', function() {
+            $('.trailer').fadeIn();
+            id = $(this).attr('id');
+            youtubeId = info[id].Trailer.slice(-11);
+            $('.trailer iframe').attr('src', 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1');
+        });
+
+        /**
+         *      HANDLE TRAILER CLOSE BUTTON
+         */
+        $('.trailer').on('click', '.trailer-close-btn', function() {
+            $(this).parent().fadeOut(function() {
+                // $(this).css('display', 'none');
+            })
+            $(this).parent().find('iframe').attr('src', '');
         });
 
         /**
