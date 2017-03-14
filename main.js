@@ -116,7 +116,9 @@ $(document).ready(function() {
                     </div>
                     `);
 
-            $('.modal-container').css('display', 'block').fadeIn();
+            $('.modal-container').fadeIn(150, function() {
+                $(this).css('display', 'block');
+            });
         });
 
         /**
@@ -124,11 +126,10 @@ $(document).ready(function() {
          */
         $('.modal-container').on('click', '.modal-close-btn', function() {
             // $(this).parent().parent().parent().fadeOut();
-            $(this).parent().parent().parent().parent().fadeOut(function() {
+            $(this).parent().parent().parent().parent().fadeOut(150, function() {
                 $(this).css('display', 'none');
                 $(this).children(':first').empty();
             });
-            // $(this).parent().parent().parent().parent().fadeOut();
         });
 
         /**
@@ -153,9 +154,7 @@ $(document).ready(function() {
          *      HANDLE TRAILER CLOSE BUTTON
          */
         $('.trailer').on('click', '.trailer-close-btn', function() {
-            $(this).parent().fadeOut(function() {
-                // $(this).css('display', 'none');
-            })
+            $(this).parent().fadeOut();
             $(this).parent().find('iframe').attr('src', '');
         });
 
@@ -166,12 +165,6 @@ $(document).ready(function() {
            if($(window).scrollTop() + $(window).height() == $(document).height()) {
                for (var i = numItems; i < numItems+amount; i++) {
                    item = info[i];
-                   if (!item.imdbRating) {
-                       item.imdbRating = '?';
-                   }
-                   if (item.Poster === 'N/A') {
-                       item.Poster = 'http://i.imgur.com/eHaEk1a.png';
-                   }
                    addCard(item, i);
 
                }
