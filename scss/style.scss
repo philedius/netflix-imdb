@@ -1,27 +1,42 @@
 $height: 400px;
 $width: $height * 0.6667;
-$modal-height: 550;
+$modal-height: 500;
 $max-modal-width: 700px;
+
 
 $black: #222;
 $primary: #202932;
+// $primary: #4f3227;
 $dark-primary: darken($primary, 5%);
 $light-primary: lighten($primary, 20%);
+$lighter-primary: lighten($primary, 75%);
+$primary-gradient: saturate(lighten($primary, 10%), 10%);
+$secondary-gradient: saturate(adjust-hue(lighten($primary, 10%), -20%), 30%);
 $secondary: complement($primary);
 $white: #eee;
-$card-menu: transparentize(lighten($primary, 5%), .05);
+$card-menu: $primary;
+$filter-menu-width: 350px;
+$card-border-radius: .5rem;
 
+html{
+    // overflow: hidden;
+    // height: 100%;
+}
+body{
+    // overflow: auto;
+    // height: 100%;
+}
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 0.7rem;
     text-align: center;
     color: $white;
-    background-color: $primary;
+    background-color: $lighter-primary;
 }
 
 .trailer {
-    z-index: 2;
+    z-index: 3;
     background-color: rgba(0, 0, 0, .95);
     display: none;
     position: fixed;
@@ -29,7 +44,6 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    -webkit-transition: display .2s; /* Safari */
     transition: display .2s;
 
     .iframe-wrapper {
@@ -60,38 +74,27 @@ body {
 .modal-container {
     display: none;
     position: fixed;
-    background-color: $secondary;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, .4);
+    margin-left: $filter-menu-width;
+    z-index: 1;
 }
 
 .modal {
-    z-index: 1;
     display: flex;
     text-align: justify;
-    justify-content: center;
     align-items: stretch;
-    margin: 10% auto;
+    width: calc(36% + #{$modal-height} * 0.6667px);
+    max-width: calc($max-modal-width + #{$modal-height} * 0.6667px);
+    height: $modal-height;
+    max-height: $modal-height;
+    margin: 8% 13%;
     padding: 0;
-    width: 80%;
-    height: $modal-height * 1px;
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.3s;
-    animation-name: animatetop;
-    animation-duration: 0.3s
-}
-
-@-webkit-keyframes animatetop {
-    from {top: -300px; opacity: 0}
-    to {top: 0; opacity: 1}
-}
-
-@keyframes animatetop {
-    from {top: -300px; opacity: 0}
-    to {top: 0; opacity: 1}
+    border-radius: $card-border-radius;
+    box-shadow: 0px 0px 20px 0px transparentize($primary, .3);
 }
 
 .modal-image {
@@ -103,6 +106,8 @@ body {
     background-position: center;
     height: $modal-height * 1px;
     width: $modal-height * 0.6667px;
+    border-top-left-radius: $card-border-radius;
+    border-bottom-left-radius: $card-border-radius;
 }
 
 .modal-trailer {
@@ -112,7 +117,6 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    -webkit-transition: height .2s; /* Safari */
     transition: height .2s;
 }
 
@@ -125,23 +129,33 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: $primary;
-    width: 50%;
+    background-color: $lighter-primary;
+    color: $dark-primary;
     max-width: $max-modal-width;
+    border-top-right-radius: $card-border-radius + .1rem;
+    border-bottom-right-radius: $card-border-radius + .1rem;
+
 }
 
 .modal-header {
-    background-color: $dark-primary;
+    background-color: $primary;
+    background: linear-gradient(to top,  $primary-gradient 0%,$secondary-gradient 100%);
+    color: $lighter-primary;
     padding: 1rem 2rem;
+    border-top-right-radius: $card-border-radius;
+
 
     h1 {
         font-size: 2.2rem;
         margin: 0;
+        font-weight: normal;
     }
 
     h2 {
         font-size: 1.3rem;
         margin: .5rem 0 0 0;
+        font-weight: normal;
+
     }
 }
 
@@ -157,7 +171,7 @@ body {
 }
 
 .modal-year {
-    color: $light-primary;
+    color: darken($lighter-primary, 30%);
 }
 
 .modal-plot {
@@ -175,23 +189,27 @@ body {
         margin: .3rem 0;
     }
     span {
-        color: desaturate(lighten($light-primary, 20%), 5%);
+        color: darken($lighter-primary, 30%);
     }
 }
 
 .modal-footer {
     font-size: 2rem;
-    background-color: $dark-primary;
-    // align-items: flex-end;
-    // height: 5rem;
-    // line-height: 5rem;
+    background-color: $primary;
+    background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
+
+    color: $lighter-primary;
+    border-top: 1px solid $light-primary;
+    border-bottom-right-radius: $card-border-radius;
     img {
-        // position: relative;
         margin-left: 1rem;
-        // top: .75rem;
         height: 2.75rem;
-        // margin-top: .7rem;
+        border-radius: 50%;
     }
+
+    .imdb-logo {
+    }
+
     .modal-imdb-rating, .modal-metacritic-rating {
         margin: 1rem 1.5rem;
     }
@@ -205,8 +223,35 @@ body {
 }
 
 .container {
-    margin: 10rem 2rem;
+    display: block;
+    margin: 2rem 2rem;
     text-align: center;
+}
+
+.filters {
+    h2 {
+        font-weight: normal;
+        font-size: 1rem;
+    }
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: fixed;
+    float: left;
+    top: 0;
+    left: 0;
+    width: $filter-menu-width;
+    height: 100%;
+    padding: 2rem;
+    background: $primary; /* Old browsers */
+    background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
+
+}
+
+.filters-container {
+    width: 90%;
 }
 
 .flex-grid {
@@ -214,38 +259,186 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    margin-left: $filter-menu-width + 40px;
 }
 
+.loading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-left: $filter-menu-width + 40px;
+}
+
+.spinner {
+    display: none;
+    width: 8rem;
+    height: 8rem;
+    background: $primary-gradient;
+    background: linear-gradient(to top, $primary-gradient 0%,$secondary-gradient 100%);
+    background-size: 200% 200%;
+    margin: 5rem auto;
+    animation: sk-rotateplane 2s infinite ease-in-out;
+
+}
+
+@keyframes sk-rotateplane {
+  0% {
+      transform: rotateZ(0deg) scale(.65);
+
+  } 25% {
+      transform: rotateZ(90deg) scale(1);
+
+    } 50% {
+        transform: rotateZ(180deg) scale(.65);
+
+    } 75% {
+        transform: rotateZ(270deg) scale(1);
+
+    } 100% {
+        transform: rotateZ(360deg) scale(.65);
+
+    }
+}
+
+$slider-width: 1.5rem;
+$slider-height: .5rem;
+$slider-touch-height: 1.5rem;
+
+.genres {
+    width: 100%;
+}
+
+.checkbox {
+    font-size: .8rem;
+    display: inline-block;
+    background-color: $light-primary;
+    border-radius: .5rem;
+    padding: .45rem .55rem .5rem .55rem;
+    margin: .2rem;
+}
+
+.checkbox:hover {
+    background-color: darken($light-primary, 10%);
+    cursor: pointer;
+}
+
+.checkbox-selected {
+    background-color: lighten($light-primary, 50%);
+    color: $primary;
+}
+
+.checkbox-selected:hover {
+    background-color: $white;
+}
+
+.sliders {
+    width: 100%;
+    text-align: left;
+}
+
+.slider {
+    min-width: $width;
+    margin: 0 auto;
+    margin-bottom: 4rem;
+}
+
+.slider-label {
+    margin: 1rem 0 2.5rem 0;
+}
+
+.noUi-tooltip {
+    border: 0;
+    border-radius: .5rem;
+    text-align: center;
+    background: $light-primary;
+    color: $white;
+    font-size: 1rem;
+    padding: .2rem .5rem .3rem .5rem;
+}
+
+
+
+.noUi-target {
+    background: $primary;
+    border: 0;
+    box-shadow: none;
+    top: .5 * $slider-height;
+    height: $slider-height;
+}
+
+.noUi-base {
+    // background: rgba(255, 0, 255, .05);
+    border: 0;
+    top: -(1 * $slider-height); // 3 is slider-touch-height
+    height: $slider-touch-height;
+}
+
+.noUi-origin {
+    margin-top: $slider-touch-height - ($slider-height * 2);
+}
+
+.noUi-handle {
+    background-color: $white;
+    box-shadow: none;
+    border: 0;
+    border-radius: 50%;
+    width: $slider-width !important;
+    height: $slider-width !important;
+    left: 0 !important;
+    top: -$slider-width / 3 !important;
+}
+
+.noUi-connect {
+    box-shadow: none;
+    background-color: $light-primary;
+    height: $slider-height;
+    margin-top: $slider-touch-height - ($slider-height * 2);
+}
+
+.noUi-handle:before,
+.noUi-handle:after {
+    display: none;
+}
+
+.noUi-horizontal.noUi-extended { padding-right: 16px; /* was 32 */ }
+.noUi-horizontal.noUi-extended .noUi-handle { left: -1px; }
+.noUi-horizontal.noUi-extended .noUi-origin  { right: -32px; }
+
 .card {
-    margin: .75rem .75rem;
+    margin: 1.75rem 1.75rem;
     display: flex;
     flex-direction: row;
     width: $width !important;
     height: $height;
+    border-radius: $card-border-radius;
     background-size: cover;
     background-position: center center;
-    background-color: $dark-primary;
+    background-color: $primary;
+    box-shadow: 0px 3px 20px 0px transparentize($primary, .6);
 }
 
 .card-menu {
-    display: none;
+    display: flex;
     justify-content: space-between;
     flex-direction: column;
     height: $height;
     width: 100%;
-    // background-color: rgba(0, 0, 100, .6);
     color: $white;
     user-select: none;
     cursor: default;
-    font-weight: bold;
+    border-radius: $card-border-radius;
 }
 
 .info-button {
     font-size: 1.3rem;
     align-items: flex-start;
     background-color: $card-menu;
+    background: linear-gradient(to top,  $primary-gradient 0%,$secondary-gradient 100%);
     text-transform: uppercase;
     padding: .5rem;
+    border-top-right-radius: $card-border-radius;
+    border-top-left-radius: $card-border-radius;
     cursor: pointer;
 }
 
@@ -257,7 +450,6 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    -webkit-transition: height .2s; /* Safari */
     transition: height .2s;
 }
 
@@ -273,12 +465,16 @@ body {
     flex-direction: row;
     font-size: 1.3rem;
     background-color: $card-menu;
+    background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
     height: 3rem;
     line-height: 3rem;
+    border-bottom-right-radius: $card-border-radius;
+    border-bottom-left-radius: $card-border-radius;
     img {
         height: 2rem;
         margin-top: .5rem;
         margin-right: 1rem;
+        border-radius: 50%;
     }
     .imdb-rating {
         margin-right: 2rem;

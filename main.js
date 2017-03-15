@@ -1,90 +1,113 @@
-$(document).ready(function() {
+'use strict';
 
-    imdbLogo = 'https://d2r1vs3d9006ap.cloudfront.net/public/uploaded_images/9999862/imdbsquarelogo_large.png';
-    metacriticLogo = 'http://i.imgur.com/ThgZkgC.png';
-    playButton = 'http://i.imgur.com/Mlij2TP.png';
-    info = [];
-    var amount = 100;
+$(document).ready(function () {
 
-    /**
-     *      GET LIST OF FILMS AND REQUEST DATA FROM OMDBAPI
-     */
-    $.getJSON("moviestrailers.json", function(json) {
+    var imdbLogo = 'https://d2r1vs3d9006ap.cloudfront.net/public/uploaded_images/9999862/imdbsquarelogo_large.png',
+        metacriticLogo = 'http://i.imgur.com/ThgZkgC.png',
+        playButton = 'http://i.imgur.com/Mlij2TP.png',
+        info = [],
+        amount = 100,
+        numItems = 0,
+        modalOpen = false;
+
+    $.getJSON("moviestrailers.json", function (json) {
         info = json.data;
-        // for (var i = 0; i < json.data.length; i++) {
-        //     q = info[i].Title.replace(' ', '+');
-        //     $.ajax({
-        //         // url: 'https://www.omdbapi.com/?t=' + json.data[i] + '&type=movie',
-        //         url: 'https://www.googleapis.com/youtube/v3/search?part=id&maxResults=1&q='+ q + 'trailer&key=AIzaSyC6akvC-Cwt0No3IO7uLDPkS8DCgCFIpIQ',
-        //         type: 'GET',
-        //         dataType: 'json',
-        //         async: false,
-        //         success: (function(data) {
-        //             // if (data.Response === 'True')
-        //             //     if (data.Poster !== 'N/A') {
-        //             //
-        //             //         info.push(data);
-        //             //     }
-        //             // console.log(data)
-        //             if (data.items[0]) {
-        //                 youtubeTrailerLink = 'https://www.youtube.com/watch?v=' + data.items[0].id.videoId;
-        //                 info[i].Trailer = youtubeTrailerLink;
-        //             } else {
-        //                 info[i].Trailer = 'N/A';
-        //                 console.log(i, info[i].Title)
-        //             }
-        //             // console.log(youtubeTrailerLink)
-        //         }),
-        //         error: (function() {
-        //             console.log('ERROR! ERROR! ERROR!');
-        //         })
-        //     });
-        // }
-    });
-
-    addCard = function(item, id) {
-        $('.flex-grid').append(
-            `<div class="card" id="${id}" style="background-image: url(${item.Poster})">
-                <div class="card-menu" id="${id}">
-                    <div class="info-button" id="${id}">more information</div>
-                    <div class="card-trailer" id="${id}" style="background-image: url(${playButton})"></div>
-                    <div class="ratings">
-                    <img src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
-                    <img src="${metacriticLogo}"/><span class="metacritic-rating">${item.Metascore}</span>
-                    </div>
-                </div>
-            </div>`);
-    }
-
-    /**
-     *      POPULATE PAGE AFTER AJAX CALLS
-     */
-    $(document).ajaxStop(function() {
-        var numItems = 0;
         for (var i = 0; i < amount; i++) {
-            item = info[i];
+            var item = info[i];
+            item.Genre = item.Genre.split(', ');
             addCard(item, i);
-
         }
+        $('.spinner').css('display', 'flex');
+        // console.log(info);
+
+        var imdbSlider = document.getElementById('imdb-slider');
+        var metacriticSlider = document.getElementById('metacritic-slider');
+        var yearSlider = document.getElementById('year-slider');
+
+        noUiSlider.create(imdbSlider, {
+        	start: [ 1, 10 ],
+        	step: 0.1,
+            margin: 1,
+            tooltips: [wNumb({ decimals: 1 }), wNumb({ decimals: 1 })],
+        	behaviour: 'snap',
+        	connect: true,
+        	range: {
+        		'min':  1,
+        		'max':  10
+        	},
+        });
+
+        noUiSlider.create(metacriticSlider, {
+        	start: [ 0, 100 ],
+        	step: 1,
+            margin: 10,
+        	behaviour: 'snap',
+            tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })],
+        	connect: true,
+        	range: {
+        		'min':  0,
+        		'max':  100
+        	}
+        });
+
+        noUiSlider.create(yearSlider, {
+        	start: [ 1900, 2017 ],
+        	step: 0.1,
+            margin: 1,
+        	behaviour: 'snap',
+            tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })],
+        	connect: true,
+        	range: {
+        		'min':  1900,
+        		'max':  2017
+        	}
+        });
+
         numItems += amount;
 
-        /**
-         *      CARD MENU HOVER HANDLING
-         */
+        handleCardMenuHover();
+        handleMoreInformationButton();
+        handleModalClosing();
+        displayTrailer();
+        handleTrailerCloseButton();
+
+        $(window).scroll(function () {
+            loadMoreCardsOnScroll();
+        });
+
+    });
+
+    var addCard = function(item, id) {
+
+            $('.flex-grid').append(
+                `<div class="card" id="${id}" style="background-image: url(${item.Poster})">
+                    <div class="card-menu" id="${id}">
+                        <div class="info-button" id="${id}">more information</div>
+                        <div class="card-trailer" id="${id}" style="background-image: url(${playButton})"></div>
+                        <div class="ratings">
+                            <img class="imdb-logo" src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
+                            <img class="metacritic-logo" src="${metacriticLogo}"/><span class="metacritic-rating">${item.Metascore}</span>
+                        </div>
+                    </div>
+                </div>`);
+            $('.card').find('.card-menu#' + id).css('display', 'none');
+    };
+
+    var handleCardMenuHover = function() {
         $('.flex-grid').on('mouseenter', '.card', function() {
-            $(this).find('.card-menu').css('display', 'flex');
+            $(this).find('.card-menu').fadeIn(150);
+
         });
 
         $('.flex-grid').on('mouseleave', '.card', function() {
-            $(this).find('.card-menu').css('display', 'none');
+            $(this).find('.card-menu').fadeOut(150);
         });
+    };
 
-        /**
-         *      MORE INFORMATION MODAL HANDLING
-         */
+    var handleMoreInformationButton = function() {
         $('.flex-grid').on('click', '.info-button', function() {
-            itemId = $(this).attr('id');
-            item = info[itemId];
+            var itemId = $(this).attr('id');
+            var item = info[itemId];
             $('.modal-container').find('.modal').append(
                 `<div class="modal-image" style="background-image: url(${item.Poster})">
                     <div class="modal-trailer" id="${itemId}" style="background-image: url(${playButton})"></div>
@@ -116,14 +139,15 @@ $(document).ready(function() {
                     </div>
                     `);
 
-            $('.modal-container').fadeIn(150, function() {
+            $('.modal-container').fadeIn(200, function() {
+                $('card.menu #' + itemId).fadeOut(10);
                 $(this).css('display', 'block');
             });
+            modalOpen = true;
         });
+    };
 
-        /**
-         *      HANDLE MODAL CLOSE BUTTON
-         */
+    var handleModalClosing = function() {
         $('.modal-container').on('click', '.modal-close-btn', function() {
             // $(this).parent().parent().parent().fadeOut();
             $(this).parent().parent().parent().parent().fadeOut(150, function() {
@@ -131,46 +155,48 @@ $(document).ready(function() {
                 $(this).children(':first').empty();
             });
         });
+        $('.modal-container').on('click', function(e) {
+                if (this === e.target) {
+                    $(this).fadeOut(150, function() {
+                        $(this).css('display', 'none');
+                        $(this).children(':first').empty();
+                    });
+                }
+        });
+        modalOpen = false;
+    };
 
-        /**
-         *      HANDLE TRAILER
-         */
-
-         $('.flex-grid').on('click', '.card-trailer', function() {
+    var displayTrailer = function() {
+        $('.flex-grid').on('click', '.card-trailer', function() {
             $('.trailer').fadeIn();
-            id = $(this).attr('id');
-            youtubeId = info[id].Trailer.slice(-11);
+            var id = $(this).attr('id');
+            var youtubeId = info[id].Trailer.slice(-11);
             $('.trailer iframe').attr('src', 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1');
         });
 
         $('.modal-container').on('click', '.modal-trailer', function() {
             $('.trailer').fadeIn();
-            id = $(this).attr('id');
-            youtubeId = info[id].Trailer.slice(-11);
+            var id = $(this).attr('id');
+            var youtubeId = info[id].Trailer.slice(-11);
             $('.trailer iframe').attr('src', 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1');
         });
+    };
 
-        /**
-         *      HANDLE TRAILER CLOSE BUTTON
-         */
+    var handleTrailerCloseButton = function() {
         $('.trailer').on('click', '.trailer-close-btn', function() {
             $(this).parent().fadeOut();
             $(this).parent().find('iframe').attr('src', '');
         });
+    };
 
-        /**
-         *      LOAD MORE CARDS WHEN USER REACHES BOTTOM OF PAGE
-         */
-        $(window).scroll(function() {
-           if($(window).scrollTop() + $(window).height() == $(document).height()) {
-               for (var i = numItems; i < numItems+amount; i++) {
-                   item = info[i];
-                   addCard(item, i);
+    var loadMoreCardsOnScroll = function() {
+        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            for (var i = numItems; i < numItems+amount; i++) {
+                var item = info[i];
+                addCard(item, i);
 
-               }
-               numItems += amount;
-           }
-        });
-
-    });
+            }
+            numItems += amount;
+        }
+    };
 });

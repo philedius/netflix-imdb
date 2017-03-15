@@ -3,6 +3,10 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync').create();
+var postcss      = require('gulp-postcss');
+var sourcemaps   = require('gulp-sourcemaps');
+var autoprefixer = require('autoprefixer');
+var babel        = require('gulp-babel');
 
 gulp.task('serve', function() {
     browserSync.init({
@@ -16,8 +20,11 @@ gulp.task('serve', function() {
         gulp.src('scss/*.scss')
           .pipe(sass().on('error', sass.logError))
           .pipe(gulp.dest('css/'))
-          .pipe(browserSync.stream());
-          console.log('Compiling scss...');
+          .pipe(sourcemaps.init())
+          .pipe(postcss([ autoprefixer() ]))
+          .pipe(sourcemaps.write('.'))
+          .pipe(gulp.dest('css/'));
+          console.log('Compiling scss and running autoprefixer...');
     });
 
     gulp.watch('css/*.css', function() {
@@ -28,14 +35,33 @@ gulp.task('serve', function() {
         console.log('Injecting css...');
     });
 
-    gulp.watch(['main.js', 'index.html']).on('change', browserSync.reload);
+    gulp.watch(['main.js', 'index.html']).on('change', function() {
+        console.log('babel: compiling...');
+        gulp.src('main.js')
+            .pipe(babel({
+                presets: ['es2015']
+            }))
+            .pipe(gulp.dest('js/'))
+            .pipe(browserSync.stream());
+    });
+
 });
 
-// gulp.task('sass', function () {
-//   return gulp.src('scss/*.scss')
-//     .pipe(sass().on('error', sass.logError))
-//     .pipe(gulp.dest('/css'))
-//     .pipe(browserSync.stream());
-// });
+gulp.task('autoprefixer', function () {
+    return gulp.src('./css/*.css')
+        .pipe(sourcemaps.init())
+        .pipe(postcss([ autoprefixer() ]))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('css/'));
+});
 
-gulp.task('default', ['serve']);
+gulp.task('babel', () => {
+    console.log('babel: compiling...');
+    return gulp.src('main.js')
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(gulp.dest('js/'));
+});
+
+gulp.task('default', ['babel', 'autoprefixer', 'serve']);

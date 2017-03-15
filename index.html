@@ -10,18 +10,54 @@
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
+    <link href="nouislider.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 	<body>
+
         <div class="trailer">
             <span class="trailer-close-btn">&times;</span>
             <div class="iframe-wrapper"><iframe src=""></iframe></div>
         </div>
         <div class="modal-container"><div class="modal"></div></div>
         <div class="container">
-            <div class="flex-grid">
+            <div class="filters">
+                <div class="filters-container">
+                    <h1>Filter list</h1>
+                    <div class="genres">
+                        <span class="checkbox checkbox-selected">Action</span>
+                        <span class="checkbox">Adventure</span>
+                        <span class="checkbox">Drama</span>
+                        <span class="checkbox checkbox-selected">Comedy</span>
+                        <span class="checkbox">Romance</span>
+                        <span class="checkbox">Biography</span>
+                        <span class="checkbox">History</span>
+                        <span class="checkbox">Crime</span>
+                        <span class="checkbox">Thriller</span>
+                        <span class="checkbox">Documentary</span>
+                        <span class="checkbox">Fantasy</span>
+                        <span class="checkbox">Family</span>
+                        <span class="checkbox">Music</span>
+                        <span class="checkbox">Horror</span>
+                        <span class="checkbox">Sci-Fi</span>
+                        <span class="checkbox">Mystery</span>
+                        <span class="checkbox">Short</span>
+                        <span class="checkbox">Animation</span>
+                        <span class="checkbox">Sport</span>
+                    </div>
+                    <div class="sliders">
+                        <h2 class="slider-label">IMDB rating</h2><div class="slider noUi-extended" id="imdb-slider"></div>
+                        <h2 class="slider-label">Metacritic rating</h2><div class="slider noUi-extended" id="metacritic-slider"></div>
+                        <h2 class="slider-label">Release year</h2><div class="slider noUi-extended" id="year-slider"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-grid"></div>
+            <div class="loading"><h1><div class="spinner"></div></h1></div>
         </div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-		<script src="main.js"></script>
+        <script src="nouislider.min.js"></script>
+        <script src="wNumb.js"></script>
+		<script src="js/main.js"></script>
 	</body>
 </html>
