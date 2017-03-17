@@ -3,7 +3,7 @@ body {
   font-size: 0.7rem;
   text-align: center;
   color: #eee;
-  background-color: #e3e8ed; }
+  background-color: #e8edf2; }
 
 .trailer {
   z-index: 3;
@@ -57,18 +57,18 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  text-align: justify;
+  text-align: left;
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;
-  width: calc(36% + 500 * 0.6667px);
-  max-width: calc($max-modal-width + 500 * 0.6667px);
-  height: 500;
-  max-height: 500;
+  width: calc(36% + 550 * 0.6667px);
+  max-width: calc($max-modal-width + 550 * 0.6667px);
+  height: 550;
+  max-height: 550;
   margin: 8% 13%;
   padding: 0;
   border-radius: 0.5rem;
-  box-shadow: 0px 0px 20px 0px rgba(32, 41, 50, 0.7); }
+  box-shadow: 0px 0px 20px 0px rgba(33, 46, 59, 0.7); }
 
 .modal-image {
   display: -webkit-box;
@@ -86,8 +86,9 @@ body {
           flex-direction: column;
   background-size: cover;
   background-position: center;
-  height: 500px;
-  width: 333.35px;
+  background-repeat: no-repeat;
+  height: 550px;
+  width: 366.685px;
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem; }
 
@@ -116,18 +117,18 @@ body {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  background-color: #e3e8ed;
-  color: #161c22;
+  background-color: #e8edf2;
+  color: #18212b;
   max-width: 700px;
   border-top-right-radius: 0.6rem;
   border-bottom-right-radius: 0.6rem; }
 
 .modal-header {
-  background-color: #202932;
-  background: -webkit-linear-gradient(bottom, #2d4358 0%, #205a65 100%);
-  background: linear-gradient(to top, #2d4358 0%, #205a65 100%);
-  color: #e3e8ed;
-  padding: 1rem 2rem;
+  background-color: #212e3b;
+  background: -webkit-linear-gradient(top, #2c4863 0%, #1e6371 100%);
+  background: linear-gradient(to bottom, #2c4863 0%, #1e6371 100%);
+  background: none;
+  padding: 1.5rem 2rem 2.5rem 2rem;
   border-top-right-radius: 0.5rem; }
   .modal-header h1 {
     font-size: 2.2rem;
@@ -148,30 +149,29 @@ body {
   cursor: pointer; }
 
 .modal-year {
-  color: #869cb2; }
+  color: #86a1bb; }
 
 .modal-plot {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   line-height: 2rem;
   padding: .5rem 5rem .5rem 1.5em;
   width: 90%; }
 
 .modal-facts {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   padding: 0rem 5rem 0rem 1.5em;
   width: 90%; }
   .modal-facts p {
     margin: .3rem 0; }
   .modal-facts span {
-    color: #869cb2; }
+    color: #86a1bb; }
 
 .modal-footer {
   font-size: 2rem;
-  background-color: #202932;
-  background: -webkit-linear-gradient(top, #2d4358 0%, #205a65 100%);
-  background: linear-gradient(to bottom, #2d4358 0%, #205a65 100%);
-  color: #e3e8ed;
-  border-top: 1px solid #485c70;
+  padding: 1rem 0;
+  background-color: #212e3b;
+  background: none;
+  color: #18212b;
   border-bottom-right-radius: 0.5rem; }
   .modal-footer img {
     margin-left: 1rem;
@@ -219,16 +219,23 @@ body {
   width: 350px;
   height: 100%;
   padding: 2rem;
-  background: #202932;
+  background: #212e3b;
   /* Old browsers */
-  background: -webkit-linear-gradient(top, #2d4358 0%, #205a65 100%);
-  background: linear-gradient(to bottom, #2d4358 0%, #205a65 100%); }
+  background: -webkit-linear-gradient(top, #2c4863 0%, #1e6371 100%);
+  background: linear-gradient(to bottom, #2c4863 0%, #1e6371 100%);
+  box-shadow: 1px 0px 20px 0px rgba(33, 46, 59, 0.4); }
   .filters h2 {
     font-weight: normal;
     font-size: 1rem; }
 
 .filters-container {
   width: 90%; }
+
+.search-result-info {
+  height: 2rem;
+  margin-left: 470px;
+  color: #46617c;
+  text-align: left; }
 
 .flex-grid {
   display: -webkit-box;
@@ -262,9 +269,9 @@ body {
   display: none;
   width: 8rem;
   height: 8rem;
-  background: #2d4358;
-  background: -webkit-linear-gradient(bottom, #2d4358 0%, #205a65 100%);
-  background: linear-gradient(to top, #2d4358 0%, #205a65 100%);
+  background: #2c4863;
+  background: -webkit-linear-gradient(bottom, #2c4863 0%, #1e6371 100%);
+  background: linear-gradient(to top, #2c4863 0%, #1e6371 100%);
   background-size: 200% 200%;
   margin: 5rem auto;
   -webkit-animation: sk-rotateplane 2s infinite ease-in-out;
@@ -310,18 +317,18 @@ body {
 .checkbox {
   font-size: .8rem;
   display: inline-block;
-  background-color: #485c70;
+  background-color: #46617c;
   border-radius: .5rem;
   padding: .45rem .55rem .5rem .55rem;
   margin: .2rem; }
 
 .checkbox:hover {
-  background-color: #344351;
+  background-color: #33485c;
   cursor: pointer; }
 
 .checkbox-selected {
-  background-color: #d4dce3;
-  color: #202932; }
+  background-color: #d8e1e9;
+  color: #212e3b; }
 
 .checkbox-selected:hover {
   background-color: #eee; }
@@ -342,13 +349,13 @@ body {
   border: 0;
   border-radius: .5rem;
   text-align: center;
-  background: #485c70;
+  background: #46617c;
   color: #eee;
   font-size: 1rem;
   padding: .2rem .5rem .3rem .5rem; }
 
 .noUi-target {
-  background: #202932;
+  background: #212e3b;
   border: 0;
   box-shadow: none;
   top: 0.25rem;
@@ -374,7 +381,7 @@ body {
 
 .noUi-connect {
   box-shadow: none;
-  background-color: #485c70;
+  background-color: #46617c;
   height: 0.5rem;
   margin-top: 0.5rem; }
 
@@ -406,8 +413,8 @@ body {
   border-radius: 0.5rem;
   background-size: cover;
   background-position: center center;
-  background-color: #202932;
-  box-shadow: 0px 3px 20px 0px rgba(32, 41, 50, 0.4); }
+  background-color: #212e3b;
+  box-shadow: 0px 3px 20px 0px rgba(33, 46, 59, 0.4); }
 
 .card-menu {
   display: -webkit-box;
@@ -428,21 +435,33 @@ body {
       -ms-user-select: none;
           user-select: none;
   cursor: default;
-  border-radius: 0.5rem; }
+  border-radius: 0.5rem;
+  font-weight: bold; }
 
 .info-button {
   font-size: 1.3rem;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
-  background-color: #202932;
-  background: -webkit-linear-gradient(bottom, #2d4358 0%, #205a65 100%);
-  background: linear-gradient(to top, #2d4358 0%, #205a65 100%);
+  background-color: #212e3b;
+  background: -webkit-linear-gradient(bottom, rgba(30, 99, 113, 0) 0%, #46617c 95%);
+  background: linear-gradient(to top, rgba(30, 99, 113, 0) 0%, #46617c 95%);
+  color: #e8edf2;
+  text-shadow: 1px 1px 15px #212e3b;
   text-transform: uppercase;
-  padding: .5rem;
+  padding: .5rem .5rem .5rem .5rem;
+  height: 3rem;
   border-top-right-radius: 0.5rem;
   border-top-left-radius: 0.5rem;
-  cursor: pointer; }
+  cursor: pointer;
+  letter-spacing: normal;
+  -webkit-transition: letter-spacing .3s;
+  transition: letter-spacing .3s;
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+.info-button:hover {
+  letter-spacing: 2px; }
 
 .card-trailer {
   -webkit-box-align: center;
@@ -454,11 +473,13 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  -webkit-transition: height .2s;
-  transition: height .2s; }
+  -webkit-transition: height .3s;
+  transition: height .3s;
+  -webkit-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
 .card-trailer:hover {
-  height: 130px;
+  height: 125px;
   cursor: pointer; }
 
 .ratings {
@@ -473,9 +494,13 @@ body {
       -ms-flex-direction: row;
           flex-direction: row;
   font-size: 1.3rem;
-  background-color: #202932;
-  background: -webkit-linear-gradient(top, #2d4358 0%, #205a65 100%);
-  background: linear-gradient(to bottom, #2d4358 0%, #205a65 100%);
+  background-color: #212e3b;
+  background: -webkit-linear-gradient(top, rgba(30, 99, 113, 0) 0%, #2c4863 95%);
+  background: linear-gradient(to bottom, rgba(30, 99, 113, 0) 0%, #2c4863 95%);
+  padding-top: 1.5rem;
+  padding-bottom: .5rem;
+  color: #e8edf2;
+  text-shadow: 1px 1px 15px #212e3b;
   height: 3rem;
   line-height: 3rem;
   border-bottom-right-radius: 0.5rem;
@@ -485,8 +510,6 @@ body {
     margin-top: .5rem;
     margin-right: 1rem;
     border-radius: 50%; }
-  .ratings .imdb-rating {
-    margin-right: 2rem; }
 
 .imdb-rating {
   -webkit-box-align: start;

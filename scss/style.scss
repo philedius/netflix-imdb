@@ -1,31 +1,24 @@
 $height: 400px;
 $width: $height * 0.6667;
-$modal-height: 500;
+$modal-height: 550;
 $max-modal-width: 700px;
+$filter-menu-width: 350px;
+$card-border-radius: .5rem;
 
 
 $black: #222;
 $primary: #202932;
-// $primary: #4f3227;
+$primary: #212e3b;
+// $primary: #324558;
 $dark-primary: darken($primary, 5%);
 $light-primary: lighten($primary, 20%);
 $lighter-primary: lighten($primary, 75%);
+$secondary: complement($primary);
 $primary-gradient: saturate(lighten($primary, 10%), 10%);
 $secondary-gradient: saturate(adjust-hue(lighten($primary, 10%), -20%), 30%);
-$secondary: complement($primary);
+$secondary-gradient: saturate(adjust-hue(lighten($primary, 10%), -20%), 30%);
 $white: #eee;
 $card-menu: $primary;
-$filter-menu-width: 350px;
-$card-border-radius: .5rem;
-
-html{
-    // overflow: hidden;
-    // height: 100%;
-}
-body{
-    // overflow: auto;
-    // height: 100%;
-}
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
@@ -85,7 +78,7 @@ body {
 
 .modal {
     display: flex;
-    text-align: justify;
+    text-align: left;
     align-items: stretch;
     width: calc(36% + #{$modal-height} * 0.6667px);
     max-width: calc($max-modal-width + #{$modal-height} * 0.6667px);
@@ -104,6 +97,7 @@ body {
     flex-direction: column;
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     height: $modal-height * 1px;
     width: $modal-height * 0.6667px;
     border-top-left-radius: $card-border-radius;
@@ -130,6 +124,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     background-color: $lighter-primary;
+
     color: $dark-primary;
     max-width: $max-modal-width;
     border-top-right-radius: $card-border-radius + .1rem;
@@ -139,9 +134,10 @@ body {
 
 .modal-header {
     background-color: $primary;
-    background: linear-gradient(to top,  $primary-gradient 0%,$secondary-gradient 100%);
-    color: $lighter-primary;
-    padding: 1rem 2rem;
+    background: linear-gradient(to bottom,  $primary-gradient 0%, $secondary-gradient 100%);
+    background: none;
+    // color: $lighter-primary;
+    padding: 1.5rem 2rem 2.5rem 2rem;
     border-top-right-radius: $card-border-radius;
 
 
@@ -175,14 +171,14 @@ body {
 }
 
 .modal-plot {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     line-height: 2rem;
     padding: .5rem 5rem .5rem 1.5em;
     width: 90%;
 }
 
 .modal-facts {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     padding: 0rem 5rem 0rem 1.5em;
     width: 90%;
     p {
@@ -195,11 +191,11 @@ body {
 
 .modal-footer {
     font-size: 2rem;
+    padding: 1rem 0;
     background-color: $primary;
-    background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
-
-    color: $lighter-primary;
-    border-top: 1px solid $light-primary;
+    // background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
+    background: none;
+    color: $dark-primary;
     border-bottom-right-radius: $card-border-radius;
     img {
         margin-left: 1rem;
@@ -247,11 +243,20 @@ body {
     padding: 2rem;
     background: $primary; /* Old browsers */
     background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
+    box-shadow: 1px 0px 20px 0px transparentize($primary, .6);
+
 
 }
 
 .filters-container {
     width: 90%;
+}
+
+.search-result-info {
+    height: 2rem;
+    margin-left: $filter-menu-width + 120px;
+    color: $light-primary;
+    text-align: left;
 }
 
 .flex-grid {
@@ -428,18 +433,33 @@ $slider-touch-height: 1.5rem;
     user-select: none;
     cursor: default;
     border-radius: $card-border-radius;
+    font-weight: bold;
 }
 
 .info-button {
     font-size: 1.3rem;
     align-items: flex-start;
     background-color: $card-menu;
-    background: linear-gradient(to top,  $primary-gradient 0%,$secondary-gradient 100%);
+    background: linear-gradient(to top, transparentize($secondary-gradient, 1) 0%, $light-primary 95%);
+
+    // background-color: transparentize($primary, .2);
+    // border-bottom: 1px solid transparentize($primary, .9);
+    color: $lighter-primary;
+    text-shadow: 1px 1px 15px $primary;
+
     text-transform: uppercase;
-    padding: .5rem;
+    padding: .5rem .5rem .5rem .5rem;
+    height: 3rem;
     border-top-right-radius: $card-border-radius;
     border-top-left-radius: $card-border-radius;
     cursor: pointer;
+    letter-spacing: normal;
+    transition: letter-spacing .3s;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.info-button:hover {
+    letter-spacing: 2px;
 }
 
 .card-trailer {
@@ -450,11 +470,13 @@ $slider-touch-height: 1.5rem;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    transition: height .2s;
+    transition: height .3s;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
 }
 
 .card-trailer:hover {
-    height: 130px;
+    height: 125px;
     cursor: pointer;
 }
 
@@ -465,7 +487,16 @@ $slider-touch-height: 1.5rem;
     flex-direction: row;
     font-size: 1.3rem;
     background-color: $card-menu;
-    background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
+    // background: linear-gradient(to bottom,  $light-primary 0%,$secondary-gradient 100%);
+
+    background: linear-gradient(to bottom, transparentize($secondary-gradient, 1) 0%, $primary-gradient 95%);
+    padding-top: 1.5rem;
+    padding-bottom: .5rem;
+    // background-color: transparentize($primary, .2);
+    // border-top: 1px solid transparentize($primary, .9);
+    color: $lighter-primary;
+    text-shadow: 1px 1px 15px $primary;
+
     height: 3rem;
     line-height: 3rem;
     border-bottom-right-radius: $card-border-radius;
@@ -475,9 +506,6 @@ $slider-touch-height: 1.5rem;
         margin-top: .5rem;
         margin-right: 1rem;
         border-radius: 50%;
-    }
-    .imdb-rating {
-        margin-right: 2rem;
     }
 }
 
