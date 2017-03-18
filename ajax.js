@@ -1,7 +1,7 @@
-for (var i = 0; i < 10; i++) {
-    info[i] = json.items[i];
+for (var i = 0; i < json.items.length; i++) {
+    fullList[i] = json.items[i];
     let q = json.items[i].Title.replace(' ', '+');
-    if (json.items[i].Type === 'series') {
+    if (json.items[i].Type === 'series' || json.items[i].Type === 'episode') {
         q = q + '+season+1+trailer';
     } else {
         q = q + '+trailer';
@@ -11,25 +11,24 @@ for (var i = 0; i < 10; i++) {
         url: 'https://www.googleapis.com/youtube/v3/search?part=id&maxResults=1&q='+ q + '&key=AIzaSyC6akvC-Cwt0No3IO7uLDPkS8DCgCFIpIQ',
         type: 'GET',
         dataType: 'json',
+        item: json.items[i],
         async: false,
         success: (function(data) {
-            // if (i % 50 === 0) console.log(i);
+            if (i % 50 === 0) console.log(i);
             // if (data.Response === 'True') {
             //     if (data.Poster !== 'N/A') {
             //         if (data.imdbRating !== 'N/A') {
-            //             info.push(data);
+            //             fullList.push(data);
             //         }
             //     }
-            //
             // }
-
-
+            // youtube needs to be async
             if (data.items[0]) {
                 let youtubeTrailerLink = 'https://www.youtube.com/embed/' + data.items[0].id.videoId + '?autoplay=1';
-                info[i].Trailer = youtubeTrailerLink;
+                fullList[i].Trailer = youtubeTrailerLink;
             } else {
-                info[i].Trailer = 'N/A';
-                console.log(i, info[i].Title);
+                fullList[i].Trailer = 'N/A';
+                console.log(i, fullList[i].Title);
             }
         }),
         error: (function () {
@@ -37,3 +36,4 @@ for (var i = 0; i < 10; i++) {
         })
     });
 }
+console.log(fullList);

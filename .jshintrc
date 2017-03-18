@@ -2,7 +2,8 @@
     "globals": {
         "$": false,
         "noUiSlider": false,
-        "wNumb": false
+        "wNumb": false,
+        "Fuse": false
     },
     "browser": true,
     "devel": true,

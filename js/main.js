@@ -7,17 +7,25 @@ $(document).ready(function () {
         playButton = 'http://i.imgur.com/Mlij2TP.png',
         fullList = [],
         filteredList = [],
-        filters = {},
+        result = [],
+        mustContainGenres = [],
+        cantContainGenres = [],
+        filters = {
+        imdb: [0, 100],
+        metacritic: [0, 100],
+        year: [1900, 2017]
+    },
         amount = 30,
         numItems = 0;
 
     $.getJSON("items.json", function (json) {
+
         fullList = json.items;
         filteredList = json.items;
 
         cleanUpItemsList();
         filterItems(filters);
-        sortItems('Title');
+        sortItems('imdbRating');
 
         loadItems();
 
@@ -29,11 +37,162 @@ $(document).ready(function () {
         handleModalClosing();
         displayTrailer();
         handleTrailerCloseButton();
-
-        $(window).scroll(function () {
-            loadMoreCardsOnScroll();
-        });
+        handleSearchBar();
+        loadMoreCardsOnScroll();
+        handleGenreButtons();
     });
+
+    var handleGenreButtons = function handleGenreButtons() {
+        $('.checkbox').on('click', function (e) {
+            console.log('wut');
+            if ($(this).hasClass('checkbox-deselected')) {
+                $(this).removeClass('checkbox-deselected');
+            } else if ($(this).hasClass('checkbox-selected')) {
+                $(this).removeClass('checkbox-selected');
+                $(this).addClass('checkbox-deselected');
+            } else {
+                $(this).addClass('checkbox-selected');
+            }
+            e.stopPropagation();
+            updateResults();
+        });
+
+        // $('.deselected').on('click', function(e) {
+        //     $('.checkbox').each(function() {
+        //         if ($(this).hasClass('checkbox-selected')) {
+        //             $(this).removeClass('checkbox-selected');
+        //             $(this).addClass('checkbox-deselected');
+        //         }
+        //         if (!$(this).hasClass('checkbox-deselected')) {
+        //             $(this).addClass('checkbox-deselected');
+        //         }
+        //         e.stopPropagation();
+        //         updateResults();
+        //     });
+        // });
+        //
+        // $('.selected').on('click', function(e) {
+        //     $('.checkbox').each(function() {
+        //         if ($(this).hasClass('checkbox-deselected')) {
+        //             $(this).removeClass('checkbox-deselected');
+        //             $(this).addClass('checkbox-selected');
+        //         }
+        //         if (!$(this).hasClass('checkbox-selected')) {
+        //             $(this).addClass('checkbox-selected');
+        //         }
+        //         e.stopPropagation();
+        //         updateResults();
+        //     });
+        // });
+        //
+        // $('.allowed').on('click', function(e) {
+        //     $('.checkbox').each(function() {
+        //         if ($(this).hasClass('checkbox-deselected')) {
+        //             $(this).removeClass('checkbox-deselected');
+        //         }
+        //         if ($(this).hasClass('checkbox-selected')) {
+        //             $(this).removeClass('checkbox-selected');
+        //         }
+        //         e.stopPropagation();
+        //         updateResults();
+        //     });
+        // });
+    };
+
+    var handleSearchBar = function handleSearchBar() {
+        $('.search-bar').on('input', function () {
+            filteredList = fullList;
+            var options = {
+                shouldSort: true,
+                threshold: 0.3,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: ["Title"]
+            };
+            var fuse = new Fuse(filteredList, options);
+            result = fuse.search($(this).val());
+            if ($.trim($(this).val()).length > 0) {
+                updateResults();
+            }
+        });
+
+        $('.search-bar').keyup(function () {
+            if (!$(this).val()) {
+                updateResults();
+            }
+        });
+    };
+
+    var hasGenre = function hasGenre(genre, item) {
+        if (item.Genre.indexOf(genre) > -1) return true;
+        return false;
+    };
+
+    var updateGenreFilterLists = function updateGenreFilterLists() {
+        mustContainGenres = [];
+        cantContainGenres = [];
+        $('.checkbox-selected').each(function () {
+            mustContainGenres.push($(this).text());
+        });
+        $('.checkbox-deselected').each(function () {
+            cantContainGenres.push($(this).text());
+        });
+    };
+
+    var passesMustContainGenresList = function passesMustContainGenresList(item) {
+        if (mustContainGenres.length > 0) {
+            for (var i = 0; i < mustContainGenres.length; i++) {
+                if (!hasGenre(mustContainGenres[i], item)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
+    var passesCantContainGenresList = function passesCantContainGenresList(item) {
+        if (cantContainGenres.length > 0) {
+            for (var i = 0; i < cantContainGenres.length; i++) {
+                if (hasGenre(cantContainGenres[i], item)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
+    var passesGenreFilters = function passesGenreFilters(item) {
+        if (passesCantContainGenresList(item)) {
+            if (passesMustContainGenresList(item)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    var filterItems = function filterItems(filters) {
+        var newList = [];
+        updateGenreFilterLists();
+        if (result.length > 0 || $('.search-bar').val() && result.length === 0) {
+            filteredList = result;
+        } else {
+            filteredList = fullList;
+            sortItems('imdbRating');
+        }
+        for (var i = 0; i < filteredList.length; i++) {
+            var item = filteredList[i];
+            var filtered = false;
+            if (!passesGenreFilters(item)) filtered = true;
+            if (item.imdbRating < filters.imdb[0] || item.imdbRating > filters.imdb[1]) filtered = true;
+            if (item.Metascore < filters.metacritic[0] || item.Metascore > filters.metacritic[1]) filtered = true;
+            if (isNaN(item.Metascore) && (filters.metacritic[0] > 0 || filters.metacritic[1] < 100)) filtered = true;
+            if (item.Year < filters.year[0] || item.Year > filters.year[1]) filtered = true;
+            if (filtered === false) newList.push(filteredList[i]);
+        }
+        filteredList = newList;
+    };
 
     var updateResults = function updateResults() {
         filterItems(filters);
@@ -41,7 +200,6 @@ $(document).ready(function () {
         $('.flex-grid').animate({ scrollTop: 0 });
         $('.search-result-info h1').empty().append(filteredList.length + ' search results');
         numItems = 0;
-        console.log(filteredList.length);
         if (filteredList.length !== 0) {
             loadItems();
         }
@@ -50,10 +208,10 @@ $(document).ready(function () {
     var cleanUpItemsList = function cleanUpItemsList() {
         for (var i = 0; i < fullList.length; i++) {
             var item = fullList[i];
-            item.Genre = item.Genre.split(',');
-            item.Language = item.Language.split(',');
-            item.Director = item.Director.split(',');
-            item.Writer = item.Writer.split(',');
+            item.Genre = item.Genre.split(', ');
+            item.Language = item.Language.split(', ');
+            item.Director = item.Director.split(', ');
+            item.Writer = item.Writer.split(', ');
             for (var j = 0; j < item.Writer.length; j++) {
                 if (item.Writer[j].indexOf('(') >= 0) {
                     item.Writer[j] = item.Writer[j].substring(0, item.Writer[j].indexOf('('));
@@ -87,30 +245,6 @@ $(document).ready(function () {
             if (isNaN(b[sortParameter])) return -1;
             return b[sortParameter] - a[sortParameter];
         });
-    };
-
-    var hasGenre = function hasGenre(genre, item) {
-        if (item.Genre.indexOf(genre) > -1) return true;
-        return false;
-    };
-
-    var filterItems = function filterItems(filters) {
-        if ($.isEmptyObject(filters)) {
-            return;
-        }
-        var newList = [];
-        for (var i = 0; i < fullList.length; i++) {
-            var item = fullList[i];
-            var filtered = false;
-            if (hasGenre('Documentary', item)) filtered = true;
-            if (hasGenre('Short', item)) filtered = true;
-            if (item.imdbRating < filters.imdb[0] || item.imdbRating > filters.imdb[1]) filtered = true;
-            if (item.Metascore < filters.metacritic[0] || item.Metascore > filters.metacritic[1]) filtered = true;
-            if (isNaN(item.Metascore) && (filters.metacritic[0] > 0 || filters.metacritic[1] < 2017)) filtered = true;
-            if (item.Year < filters.year[0] || item.Year > filters.year[1]) filtered = true;
-            if (filtered === false) newList.push(fullList[i]);
-        }
-        filteredList = newList;
     };
 
     var handleSliders = function handleSliders() {
@@ -241,16 +375,12 @@ $(document).ready(function () {
         $('.flex-grid').on('click', '.card-trailer', function () {
             $('.trailer').fadeIn();
             var id = $(this).attr('id');
-
-            // $('.trailer iframe').attr('src', info[id].Trailer);
-            $('.trailer iframe').attr('src', 'https://www.youtube.com/embed/3eRBFkxgG7g?autoplay=1');
+            $('.trailer iframe').attr('src', filteredList[id].Trailer);
         });
 
         $('.modal-container').on('click', '.modal-trailer', function () {
-            $('.trailer').fadeIn();
-            var id = $(this).attr('id');
-            // $('.trailer iframe').attr('src', info[id].Trailer);
-            $('.trailer iframe').attr('src', 'https://www.youtube.com/embed/3eRBFkxgG7g?autoplay=1');
+            $('.trailer').fadeIn();var id = $(this).attr('id');
+            $('.trailer iframe').attr('src', filteredList[id].Trailer);
         });
     };
 
@@ -263,8 +393,7 @@ $(document).ready(function () {
 
     var loadItems = function loadItems() {
         var amnt = amount;
-        if (amount >= filteredList.length) amnt = filteredList.length;
-        if (numItems >= filteredList.length) return;
+        if (numItems + amount >= filteredList.length) amnt = filteredList.length - numItems;
         for (var i = numItems; i < numItems + amnt; i++) {
             var item = filteredList[i];
             addCard(item, i);
@@ -273,8 +402,12 @@ $(document).ready(function () {
     };
 
     var loadMoreCardsOnScroll = function loadMoreCardsOnScroll() {
-        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-            loadItems();
-        }
+        $(window).scroll(function () {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                $('.loading').show();
+                loadItems();
+                $('.loading').hide();
+            }
+        });
     };
 });

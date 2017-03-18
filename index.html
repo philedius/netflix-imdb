@@ -24,26 +24,36 @@
             <div class="filters">
                 <div class="filters-container">
                     <h1>Filter list</h1>
+                    <div class="search">
+                        <input class="search-bar" type="text" name="search">
+                        <!-- <div class="search-results"></div> -->
+                    </div>
                     <div class="genres">
-                        <span class="checkbox checkbox-selected">Action</span>
-                        <span class="checkbox checkbox-selected">Adventure</span>
-                        <span class="checkbox checkbox-selected">Drama</span>
-                        <span class="checkbox checkbox-selected">Comedy</span>
-                        <span class="checkbox checkbox-selected">Romance</span>
-                        <span class="checkbox checkbox-selected">Biography</span>
-                        <span class="checkbox checkbox-selected">History</span>
-                        <span class="checkbox checkbox-selected">Crime</span>
-                        <span class="checkbox checkbox-selected">Thriller</span>
-                        <span class="checkbox">Documentary</span>
-                        <span class="checkbox checkbox-selected">Fantasy</span>
-                        <span class="checkbox checkbox-selected">Family</span>
-                        <span class="checkbox checkbox-selected">Music</span>
-                        <span class="checkbox checkbox-selected">Horror</span>
-                        <span class="checkbox checkbox-selected">Sci-Fi</span>
-                        <span class="checkbox checkbox-selected">Mystery</span>
-                        <span class="checkbox">Short</span>
-                        <span class="checkbox checkbox-selected">Animation</span>
-                        <span class="checkbox checkbox-selected">Sport</span>
+                        <h1>Filter out genres</h1>
+                        <div class="check-uncheck-all"><span class="allowed">Can contain</span> &rarr; <span class="selected">Must contain</span> &rarr; <span class="deselected">Can't contain</span></div>
+                        <div>
+                            <span class="checkbox">Action</span>
+                            <span class="checkbox">Adventure</span>
+                            <span class="checkbox">Drama</span>
+                            <span class="checkbox">Comedy</span>
+                            <span class="checkbox">Romance</span>
+                            <span class="checkbox">Biography</span>
+                            <span class="checkbox">History</span>
+                            <span class="checkbox">Crime</span>
+                            <span class="checkbox">Thriller</span>
+                            <span class="checkbox">Documentary</span>
+                            <span class="checkbox">Fantasy</span>
+                            <span class="checkbox">Family</span>
+                            <span class="checkbox">Music</span>
+                            <span class="checkbox">Musical</span>
+                            <span class="checkbox">Horror</span>
+                            <span class="checkbox">Sci-Fi</span>
+                            <span class="checkbox">Mystery</span>
+                            <span class="checkbox">Short</span>
+                            <span class="checkbox">Animation</span>
+                            <span class="checkbox">Sport</span>
+                            <span class="checkbox">Western</span>
+                        </div>
                     </div>
                     <div class="sliders">
                         <h2 class="slider-label">IMDB rating</h2><div class="slider noUi-extended" id="imdb-slider"></div>
@@ -59,6 +69,7 @@
             <div class="loading"><h1><div class="spinner"></div></h1></div>
         </div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.6.1/fuse.min.js"></script>
         <script src="nouislider.min.js"></script>
         <script src="wNumb.js"></script>
 		<script src="js/main.js"></script>
