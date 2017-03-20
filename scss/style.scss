@@ -1,22 +1,25 @@
-$height: 400px;
+$height: 18vw;
+$min-height: 350px;
 $width: $height * 0.6667;
+$min-width: $min-height * 0.6667;
 $modal-height: 550;
 $max-modal-width: 700px;
+$item-info-height: 550;
 $filter-menu-width: 350px;
 $card-border-radius: .5rem;
 
 
 $black: #222;
-$primary: #202932;
-$primary: #212e3b;
+$primary: saturate(#212e3b, 10%);
+// $primary: #2f3b21;
 // $primary: #324558;
 $dark-primary: darken($primary, 5%);
 $light-primary: lighten($primary, 20%);
 $lighter-primary: lighten($primary, 75%);
-$secondary: complement($primary);
+$secondary: adjust-hue($light-primary, 150%);
 $primary-gradient: saturate(lighten($primary, 10%), 10%);
-$secondary-gradient: saturate(adjust-hue(lighten($primary, 10%), -20%), 30%);
-$secondary-gradient: saturate(adjust-hue(lighten($primary, 10%), -20%), 30%);
+$secondary-gradient: saturate(adjust-hue(lighten($primary, 9%), 10%), 10%);
+// $secondary-gradient: saturate(adjust-hue(lighten($secondary, 10%), -20%), 30%);
 $white: #eee;
 $card-menu: $primary;
 
@@ -29,15 +32,15 @@ body {
 }
 
 .trailer {
-    z-index: 3;
-    background-color: rgba(0, 0, 0, .95);
+    z-index: 6;
+    background-color: transparentize(darken($dark-primary, 5%), .1);
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    transition: display .2s;
+    // transition: display .2s;
 
     .iframe-wrapper {
         display: flex;
@@ -48,8 +51,8 @@ body {
         height: 100%;
 
         iframe {
-            width: 90%;
-            height: 90%;
+            width: 84vw;
+            height: 47.25vw;
             border: 0;
         }
     }
@@ -64,27 +67,105 @@ body {
     cursor: pointer;
 }
 
-.modal-container {
+.item-background {
     display: none;
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .4);
-    margin-left: $filter-menu-width;
-    z-index: 1;
+    background-color: rgba(0, 0, 0, .6);
+    // margin-left: $filter-menu-width;
+    z-index: 4;
+    align-items: center;
+    justify-content: center;
 }
+
+.item-container {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    width: 60vw;
+    // max-width: calc($max-modal-width + #{$item-info-heigh} * 0.6667px);
+    height: $item-info-height * 1.5px;
+    padding: 0;
+    box-shadow: 0px 0px 20px 0px transparentize($primary, .3);
+    background-color: green;
+    z-index: 4;
+}
+
+.item-upper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: $item-info-height * 1px;
+    background-color: $lighter-primary;
+    color: $primary;
+}
+
+.item-picture {
+    display: flex;
+    width: $item-info-height * 0.6px;
+    min-width: 200px;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.item-main-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 5%;
+    width: 55%;
+    height: 90%;
+}
+
+.item-title {
+    font-size: 3rem;
+}
+
+.item-plot {
+    font-size: 1.3rem;
+}
+
+.item-facts {
+    font-size: 1.3rem;
+}
+
+.item-lower {
+    flex-direction: row;
+    width: 100%;
+    height: $item-info-height * 0.5px;
+    background-color: $primary-gradient;
+    color: $white;
+}
+
+.modal-container {
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparentize(darken($dark-primary, 5%), .3);
+    z-index: 4;
+}
+
 
 .modal {
     display: flex;
     text-align: left;
     align-items: stretch;
-    width: calc(36% + #{$modal-height} * 0.6667px);
-    max-width: calc($max-modal-width + #{$modal-height} * 0.6667px);
-    height: $modal-height;
-    max-height: $modal-height;
-    margin: 8% 13%;
+    // width: calc(36% + #{$modal-height} * 0.6667px);
+    // max-width: calc($max-modal-width + #{$modal-height} * 0.6667px);
+    width: $modal-height * 2px;
+    height: $modal-height * 1px;
     padding: 0;
     border-radius: $card-border-radius;
     box-shadow: 0px 0px 20px 0px transparentize($primary, .3);
@@ -126,7 +207,6 @@ body {
     background-color: $lighter-primary;
 
     color: $dark-primary;
-    max-width: $max-modal-width;
     border-top-right-radius: $card-border-radius + .1rem;
     border-bottom-right-radius: $card-border-radius + .1rem;
 
@@ -250,13 +330,9 @@ body {
 
 .filters-container {
     width: 90%;
-}
-
-.search-result-info {
-    height: 2rem;
-    margin-left: $filter-menu-width + 120px;
-    color: $light-primary;
-    text-align: left;
+    h2 {
+        margin: 1rem 0 .3rem 0;
+    }
 }
 
 .flex-grid {
@@ -320,13 +396,11 @@ $slider-touch-height: 1.5rem;
 .search-bar {
     width: 100%;
     height: 2em;
-    border-top-left-radius: .5rem;
-    border-top-right-radius: .5rem;
-    border-radius: .5rem;
+    border-radius: 1rem;
     border: none;
     font-size: 1rem;
-    padding: .2rem .5rem;
-    margin: 2rem 0;
+    padding: .3rem 1rem;
+    margin: 1rem 0;
     background-color: $lighter-primary;
     color: $black;
     transition: height 0.4s ease-in-out;
@@ -351,11 +425,17 @@ $slider-touch-height: 1.5rem;
     color: $black;
 }
 
-.genres {
+.content-type {
     width: 100%;
+    margin: 1rem 0;
 }
 
-.checkbox {
+.sort-options {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.button {
     font-size: .8rem;
     display: inline-block;
     background-color: $light-primary;
@@ -366,10 +446,26 @@ $slider-touch-height: 1.5rem;
     transition: color, background-color .15s;
 }
 
-.checkbox:hover {
+.button:hover {
     background-color: darken($light-primary, 2%);
     cursor: pointer;
 }
+
+.radiobutton-selected {
+    background-color: lighten($light-primary, 50%);
+    color: $primary;
+}
+
+.radiobutton-selected:hover {
+    background-color: lighten($light-primary, 54%);
+}
+
+.genres {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+
 
 .checkbox-selected {
     background-color: lighten($light-primary, 50%);
@@ -382,10 +478,12 @@ $slider-touch-height: 1.5rem;
 
 .checkbox-deselected {
     background-color: lighten(desaturate($light-primary, 100%), 5%);
+    background-color: $secondary;
 }
 
 .checkbox-deselected:hover {
     background-color: desaturate($light-primary, 100%);
+    background-color: darken($secondary, 2%);
 }
 
 .check-uncheck-all {
@@ -431,13 +529,14 @@ $slider-touch-height: 1.5rem;
 }
 
 .deselected {
-    background-color: lighten(desaturate($light-primary, 100%), 5%);
+    background-color: $secondary;
 }
 
 
 .sliders {
     width: 100%;
-    text-align: left;
+    // text-align: left;
+    margin: 2rem 0;
 }
 
 .slider {
@@ -512,11 +611,13 @@ $slider-touch-height: 1.5rem;
 .noUi-horizontal.noUi-extended .noUi-origin  { right: -32px; }
 
 .card {
-    margin: 1.75rem 1.75rem;
+    margin: 1rem 1rem;
     display: flex;
     flex-direction: row;
     width: $width !important;
     height: $height;
+    min-width: $min-width !important;
+    min-height: $min-height;
     border-radius: $card-border-radius;
     background-size: cover;
     background-position: center center;
@@ -530,6 +631,7 @@ $slider-touch-height: 1.5rem;
     flex-direction: column;
     height: $height;
     width: 100%;
+    min-height: $min-height;
     color: $white;
     user-select: none;
     cursor: default;
@@ -565,6 +667,7 @@ $slider-touch-height: 1.5rem;
 
 .card-trailer {
     align-items: center;
+    height: 110px;
     height: 110px;
     width: 50%;
     margin: 0 auto;

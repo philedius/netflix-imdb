@@ -1,4 +1,5 @@
 'use strict';
+$('.modal-container').css('display', 'none');
 
 $(document).ready(function () {
 
@@ -8,8 +9,10 @@ $(document).ready(function () {
         fullList = [],
         filteredList = [],
         result = [],
+        contentType = 'Everything',
+        sortOption = 'imdbRating',
         mustContainGenres = [],
-        cantContainGenres = [],
+        cantContainGenres = ['Documentary', 'Short', 'Animation'],
         filters = {
             imdb: [0, 100],
             metacritic: [0, 100],
@@ -18,18 +21,14 @@ $(document).ready(function () {
         amount = 30,
         numItems = 0;
 
-    $.getJSON("items.json", function (json) {
-
+    $.getJSON("test.json", function (json) {
 
         fullList = json.items;
         filteredList = json.items;
 
         cleanUpItemsList();
         filterItems(filters);
-        sortItems('imdbRating');
-
         loadItems();
-
         $('.spinner').css('display', 'flex');
 
         handleSliders();
@@ -41,13 +40,37 @@ $(document).ready(function () {
         handleSearchBar();
         loadMoreCardsOnScroll();
         handleGenreButtons();
-
+        handleContentTypeFiltering();
+        handleSortOptions();
 
     });
 
+    var handleContentTypeFiltering = function() {
+        $('.content-type .radiobutton').on('click', function(e) {
+            if (!$(this).hasClass('radiobutton-selected')) {
+                $(this).parent().find('.radiobutton-selected').removeClass('radiobutton-selected');
+                $(this).addClass('radiobutton-selected');
+                contentType = $(this).text();
+            }
+            e.stopPropagation();
+            updateResults();
+        });
+    };
+
+    var handleSortOptions = function() {
+        $('.sort-options .radiobutton').on('click', function(e) {
+            if (!$(this).hasClass('radiobutton-selected')) {
+                $(this).parent().find('.radiobutton-selected').removeClass('radiobutton-selected');
+                $(this).addClass('radiobutton-selected');
+                sortOption = $(this).attr('id');
+            }
+            e.stopPropagation();
+            updateResults();
+        });
+    };
+
     var handleGenreButtons = function() {
         $('.checkbox').on('click', function(e) {
-            console.log('wut');
             if ($(this).hasClass('checkbox-deselected')) {
                 $(this).removeClass('checkbox-deselected');
             } else if ($(this).hasClass('checkbox-selected')) {
@@ -59,47 +82,6 @@ $(document).ready(function () {
             e.stopPropagation();
             updateResults();
         });
-
-        // $('.deselected').on('click', function(e) {
-        //     $('.checkbox').each(function() {
-        //         if ($(this).hasClass('checkbox-selected')) {
-        //             $(this).removeClass('checkbox-selected');
-        //             $(this).addClass('checkbox-deselected');
-        //         }
-        //         if (!$(this).hasClass('checkbox-deselected')) {
-        //             $(this).addClass('checkbox-deselected');
-        //         }
-        //         e.stopPropagation();
-        //         updateResults();
-        //     });
-        // });
-        //
-        // $('.selected').on('click', function(e) {
-        //     $('.checkbox').each(function() {
-        //         if ($(this).hasClass('checkbox-deselected')) {
-        //             $(this).removeClass('checkbox-deselected');
-        //             $(this).addClass('checkbox-selected');
-        //         }
-        //         if (!$(this).hasClass('checkbox-selected')) {
-        //             $(this).addClass('checkbox-selected');
-        //         }
-        //         e.stopPropagation();
-        //         updateResults();
-        //     });
-        // });
-        //
-        // $('.allowed').on('click', function(e) {
-        //     $('.checkbox').each(function() {
-        //         if ($(this).hasClass('checkbox-deselected')) {
-        //             $(this).removeClass('checkbox-deselected');
-        //         }
-        //         if ($(this).hasClass('checkbox-selected')) {
-        //             $(this).removeClass('checkbox-selected');
-        //         }
-        //         e.stopPropagation();
-        //         updateResults();
-        //     });
-        // });
     };
 
     var handleSearchBar = function() {
@@ -113,7 +95,7 @@ $(document).ready(function () {
                 maxPatternLength: 32,
                 minMatchCharLength: 1,
                 keys: [
-                    "Title"
+                    'Title'
                 ]
             };
             var fuse = new Fuse(filteredList, options);
@@ -177,6 +159,14 @@ $(document).ready(function () {
         return false;
     };
 
+    var passesContentTypeCheck = function(item) {
+        if (contentType === 'Movies' && item.Type === 'movie') return true;
+        if (contentType === 'TV shows' && item.Type === 'series') return true;
+        if (contentType === 'Everything') return true;
+        return false;
+    };
+
+
     var filterItems = function(filters) {
         var newList = [];
         updateGenreFilterLists();
@@ -184,11 +174,12 @@ $(document).ready(function () {
             filteredList = result;
         } else {
             filteredList = fullList;
-            sortItems('imdbRating');
+            sortItems(sortOption);
         }
         for (let i = 0; i < filteredList.length; i++) {
             let item = filteredList[i];
             let filtered = false;
+            if (!passesContentTypeCheck(item)) filtered = true;
             if (!passesGenreFilters(item)) filtered = true;
             if (item.imdbRating < filters.imdb[0] || item.imdbRating > filters.imdb[1]) filtered = true;
             if (item.Metascore < filters.metacritic[0] || item.Metascore > filters.metacritic[1]) filtered = true;
@@ -230,6 +221,20 @@ $(document).ready(function () {
             item.Runtime = item.Runtime.substring(0, item.Runtime.indexOf('m'));
             item.Runtime = item.Runtime.substring(0, item.Runtime.length - 1);
             item.Runtime = parseInt(item.Runtime);
+            if (item.Poster === 'N/A') item.Poster = 'http://i.imgur.com/g2XkPrD.png';
+            // var img = new Image();
+            // img.addEventListener("load", function(){
+            //     if (this.naturalWidth < 250) {
+            //         console.log(item.Title + ': ' + this.naturalWidth +'x'+ this.naturalHeight );
+            //     }
+            // });
+            // img.src = item.Poster;
+            if (item.Plot === 'N/A') item.Plot = 'N/A';
+            for (let j = fullList.length - 1; j >= 0; j--) {
+                if (item.Title === fullList[j].Title && i !== j) {
+                    fullList.splice(j, 1);
+                }
+            }
         }
     };
 
@@ -358,9 +363,9 @@ $(document).ready(function () {
             var itemId = $(this).attr('id');
             var item = filteredList[itemId];
             $('.modal-container').find('.modal').append(
-                `<div class="modal-image" style="background-image: url(${item.Poster})">
+                `<div class="modal-image-wrapper"><div class="modal-image" style="background-image: url(${item.Poster})">
                     <div class="modal-trailer" id="${itemId}" style="background-image: url(${playButton})"></div>
-                </div>
+                </div></div>
                     <div class="modal-content" id="${itemId}">
                         <div class="modal-header">
                             <span class="modal-close-btn">&times;</span>
@@ -386,6 +391,29 @@ $(document).ready(function () {
                         </div>
                     </div>
             `);
+            // $('.item-background').find('.item-container').append(
+            //     `<div class="item-upper">
+            //         <div class="item-picture" style="background-image: url(${item.Poster})">
+            //             <div class="trailer" id="${itemId}" style="background-image: url(${playButton})"></div>
+            //         </div>
+            //         <div class="item-main-info">
+            //             <h1 class="item-title">${item.Title}</h1>
+            //             <p class="item-plot">${item.Plot}</p>
+            //             <div class="item-facts">
+            //             <div class="item-fact">Runtime: ${item.Runtime}</div>
+            //             <div class="item-fact">Director: ${item.Director}</div>
+            //             <div class="item-fact">Writer: ${item.Writer}</div>
+            //             <div class="item-fact">Actors: ${item.Actors}</div>
+            //             </div>
+            //         </div>
+            //     </div>
+            //     <div class="item-lower">
+            //         <div class="item-ratings">
+            //             <div class="item-imdb">${item.imdbRating}</div>
+            //             <div class="item-imdb">${item.Metascore}</div>
+            //         </div>
+            //     </div>
+            // `);
 
 
             if (!isNaN(item.Metascore)) {
@@ -394,8 +422,13 @@ $(document).ready(function () {
 
             $('.modal-container').fadeIn(200, function() {
                 $('card.menu #' + itemId).fadeOut(10);
-                $(this).css('display', 'block');
+                $(this).css('display', 'flex');
             });
+
+            // $('.item-background').fadeIn(200, function() {
+            //     $('card.menu #' + itemId).fadeOut(10);
+            //     $(this).css('display', 'flex');
+            // });
         });
     };
 
@@ -435,24 +468,28 @@ $(document).ready(function () {
             $(this).parent().fadeOut();
             $(this).parent().find('iframe').attr('src', '');
         });
+        $('.trailer').on('click', function(e) {
+            $(this).fadeOut();
+            $(this).find('iframe').attr('src', '');
+        });
     };
 
     var loadItems = function() {
+        $('.loading').show();
         let amnt = amount;
         if (numItems + amount >= filteredList.length) amnt = filteredList.length - numItems;
         for (let i = numItems; i < numItems + amnt; i++) {
             let item = filteredList[i];
             addCard(item, i);
         }
+        $('.loading').hide();
         numItems += amnt;
     };
 
     var loadMoreCardsOnScroll = function() {
         $(window).scroll(function () {
             if($(window).scrollTop() + $(window).height() == $(document).height()) {
-                $('.loading').show();
                 loadItems();
-                $('.loading').hide();
 
             }
         });

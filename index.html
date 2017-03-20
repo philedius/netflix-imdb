@@ -20,39 +20,53 @@
             <div class="iframe-wrapper"><iframe src=""></iframe></div>
         </div>
         <div class="modal-container"><div class="modal"></div></div>
+        <!-- <div class="item-background"><div class="item-container"></div></div> -->
         <div class="container">
             <div class="filters">
                 <div class="filters-container">
-                    <h1>Filter list</h1>
                     <div class="search">
-                        <input class="search-bar" type="text" name="search">
+                        <input class="search-bar" type="text" name="search" placeholder="Search..." onfocus="this.placeholder = ''">
                         <!-- <div class="search-results"></div> -->
                     </div>
+                    <div class="content-type">
+                        <h2>Filter by type of media</h2>
+                        <span class="button radiobutton">Movies</span>
+                        <span class="button radiobutton">TV shows</span>
+                        <span class="button radiobutton radiobutton-selected">Everything</span>
+                    </div>
+                    <div class="sort-options">
+                        <h2>Sort by</h2>
+                        <span id="imdbRating" class="button radiobutton radiobutton-selected">IMDB rating</span>
+                        <span id="Metascore" class="button radiobutton">Metacritic rating</span>
+                        <span id="Title" class="button radiobutton">Title</span>
+                        <span id="Runtime" class="button radiobutton">Runtime</span>
+                        <span id="Year" class="button radiobutton">Release Year</span>
+                    </div>
                     <div class="genres">
-                        <h1>Filter out genres</h1>
+                        <h2>Filter by genres</h2>
                         <div class="check-uncheck-all"><span class="allowed">Can contain</span> &rarr; <span class="selected">Must contain</span> &rarr; <span class="deselected">Can't contain</span></div>
                         <div>
-                            <span class="checkbox">Action</span>
-                            <span class="checkbox">Adventure</span>
-                            <span class="checkbox">Drama</span>
-                            <span class="checkbox">Comedy</span>
-                            <span class="checkbox">Romance</span>
-                            <span class="checkbox">Biography</span>
-                            <span class="checkbox">History</span>
-                            <span class="checkbox">Crime</span>
-                            <span class="checkbox">Thriller</span>
-                            <span class="checkbox">Documentary</span>
-                            <span class="checkbox">Fantasy</span>
-                            <span class="checkbox">Family</span>
-                            <span class="checkbox">Music</span>
-                            <span class="checkbox">Musical</span>
-                            <span class="checkbox">Horror</span>
-                            <span class="checkbox">Sci-Fi</span>
-                            <span class="checkbox">Mystery</span>
-                            <span class="checkbox">Short</span>
-                            <span class="checkbox">Animation</span>
-                            <span class="checkbox">Sport</span>
-                            <span class="checkbox">Western</span>
+                            <span class="button checkbox">Action</span>
+                            <span class="button checkbox">Adventure</span>
+                            <span class="button checkbox">Drama</span>
+                            <span class="button checkbox">Comedy</span>
+                            <span class="button checkbox">Romance</span>
+                            <span class="button checkbox">Biography</span>
+                            <span class="button checkbox">History</span>
+                            <span class="button checkbox">Crime</span>
+                            <span class="button checkbox">Thriller</span>
+                            <span class="button checkbox checkbox-deselected">Documentary</span>
+                            <span class="button checkbox">Fantasy</span>
+                            <span class="button checkbox">Family</span>
+                            <span class="button checkbox">Music</span>
+                            <span class="button checkbox">Musical</span>
+                            <span class="button checkbox">Horror</span>
+                            <span class="button checkbox">Sci-Fi</span>
+                            <span class="button checkbox">Mystery</span>
+                            <span class="button checkbox checkbox-deselected">Short</span>
+                            <span class="button checkbox checkbox-deselected">Animation</span>
+                            <span class="button checkbox">Sport</span>
+                            <span class="button checkbox">Western</span>
                         </div>
                     </div>
                     <div class="sliders">
