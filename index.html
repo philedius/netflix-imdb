@@ -24,6 +24,7 @@
         <div class="container">
             <div class="filters">
                 <div class="filters-container">
+                    <div class="filters-close-btn">&times;</div>
                     <div class="search">
                         <input class="search-bar" type="text" name="search" placeholder="Search..." onfocus="this.placeholder = ''">
                         <!-- <div class="search-results"></div> -->
@@ -38,6 +39,7 @@
                         <h2>Sort by</h2>
                         <span id="imdbRating" class="button radiobutton radiobutton-selected">IMDB rating</span>
                         <span id="Metascore" class="button radiobutton">Metacritic rating</span>
+                        <span id="Tomatometer" class="button radiobutton">Tomatometer</span>
                         <span id="Title" class="button radiobutton">Title</span>
                         <span id="Runtime" class="button radiobutton">Runtime</span>
                         <span id="Year" class="button radiobutton">Release Year</span>
@@ -67,11 +69,13 @@
                             <span class="button checkbox checkbox-deselected">Animation</span>
                             <span class="button checkbox">Sport</span>
                             <span class="button checkbox">Western</span>
+                            <span class="button checkbox checkbox-deselected">Reality-TV</span>
                         </div>
                     </div>
                     <div class="sliders">
                         <h2 class="slider-label">IMDB rating</h2><div class="slider noUi-extended" id="imdb-slider"></div>
                         <h2 class="slider-label">Metacritic rating</h2><div class="slider noUi-extended" id="metacritic-slider"></div>
+                        <h2 class="slider-label">Tomatometer</h2><div class="slider noUi-extended" id="tomatometer-slider"></div>
                         <h2 class="slider-label">Release year</h2><div class="slider noUi-extended" id="year-slider"></div>
                     </div>
                 </div>
@@ -86,6 +90,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/2.6.1/fuse.min.js"></script>
         <script src="nouislider.min.js"></script>
         <script src="wNumb.js"></script>
+        <script src="jquery-ui.min.js"></script>
 		<script src="js/main.js"></script>
 	</body>
 </html>

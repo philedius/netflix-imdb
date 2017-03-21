@@ -1,11 +1,13 @@
-$height: 18vw;
-$min-height: 350px;
+$height: 19%;
+$height: 19vw;
+$min-height: 330px;
 $width: $height * 0.6667;
 $min-width: $min-height * 0.6667;
-$modal-height: 550;
+$modal-height: 550px;
 $max-modal-width: 700px;
 $item-info-height: 550;
-$filter-menu-width: 350px;
+$filter-menu-width: 375px;
+$filter-menu-width: 23.5rem;
 $card-border-radius: .5rem;
 
 
@@ -67,83 +69,6 @@ body {
     cursor: pointer;
 }
 
-.item-background {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .6);
-    // margin-left: $filter-menu-width;
-    z-index: 4;
-    align-items: center;
-    justify-content: center;
-}
-
-.item-container {
-    display: flex;
-    text-align: left;
-    flex-direction: column;
-    width: 60vw;
-    // max-width: calc($max-modal-width + #{$item-info-heigh} * 0.6667px);
-    height: $item-info-height * 1.5px;
-    padding: 0;
-    box-shadow: 0px 0px 20px 0px transparentize($primary, .3);
-    background-color: green;
-    z-index: 4;
-}
-
-.item-upper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: $item-info-height * 1px;
-    background-color: $lighter-primary;
-    color: $primary;
-}
-
-.item-picture {
-    display: flex;
-    width: $item-info-height * 0.6px;
-    min-width: 200px;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.item-main-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-right: 5%;
-    width: 55%;
-    height: 90%;
-}
-
-.item-title {
-    font-size: 3rem;
-}
-
-.item-plot {
-    font-size: 1.3rem;
-}
-
-.item-facts {
-    font-size: 1.3rem;
-}
-
-.item-lower {
-    flex-direction: row;
-    width: 100%;
-    height: $item-info-height * 0.5px;
-    background-color: $primary-gradient;
-    color: $white;
-}
-
 .modal-container {
     display: flex;
     position: fixed;
@@ -164,8 +89,8 @@ body {
     align-items: stretch;
     // width: calc(36% + #{$modal-height} * 0.6667px);
     // max-width: calc($max-modal-width + #{$modal-height} * 0.6667px);
-    width: $modal-height * 2px;
-    height: $modal-height * 1px;
+    width: $modal-height * 2;
+    height: $modal-height * 1;
     padding: 0;
     border-radius: $card-border-radius;
     box-shadow: 0px 0px 20px 0px transparentize($primary, .3);
@@ -179,8 +104,8 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: $modal-height * 1px;
-    width: $modal-height * 0.6667px;
+    height: $modal-height * 1;
+    width: $modal-height * 0.66667;
     border-top-left-radius: $card-border-radius;
     border-bottom-left-radius: $card-border-radius;
 }
@@ -286,7 +211,7 @@ body {
     .imdb-logo {
     }
 
-    .modal-imdb-rating, .modal-metacritic-rating {
+    .modal-imdb-rating, .modal-metacritic-rating, .modal-rottentomatoes-rating {
         margin: 1rem 1.5rem;
     }
 }
@@ -310,6 +235,7 @@ body {
         font-size: 1rem;
     }
     z-index: 2;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -328,6 +254,22 @@ body {
 
 }
 
+.filters::-webkit-scrollbar-track
+{
+    background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
+}
+
+.filters::-webkit-scrollbar
+{
+	width: 5px;
+}
+
+.filters::-webkit-scrollbar-thumb
+{
+    border-radius: 3px;
+	background-color: $lighter-primary;
+}
+
 .filters-container {
     width: 90%;
     h2 {
@@ -335,12 +277,21 @@ body {
     }
 }
 
+.filters-close-btn {
+    position: absolute;
+    font-size: 2.5rem;
+    top: 0rem;
+    right: .6rem;
+    cursor: pointer;
+}
+
 .flex-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin-left: $filter-menu-width + 40px;
+    // margin-left: $filter-menu-width + 40px;
+    margin-left: $filter-menu-width + 2rem;
 }
 
 .loading {
@@ -348,7 +299,8 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin-left: $filter-menu-width + 40px;
+    // margin-left: $filter-menu-width + 40px;
+    margin-left: $filter-menu-width + 2rem;
 }
 
 .spinner {
@@ -440,7 +392,7 @@ $slider-touch-height: 1.5rem;
     display: inline-block;
     background-color: $light-primary;
     border-radius: .5rem;
-    padding: .45rem .55rem .5rem .55rem;
+    padding: .25rem .45rem;
     margin: .2rem;
     user-select: none;
     transition: color, background-color .15s;
@@ -536,7 +488,8 @@ $slider-touch-height: 1.5rem;
 .sliders {
     width: 100%;
     // text-align: left;
-    margin: 2rem 0;
+    margin-top: 1rem;
+    margin-bottom: 8rem;
 }
 
 .slider {
@@ -616,31 +569,34 @@ $slider-touch-height: 1.5rem;
     flex-direction: row;
     width: $width !important;
     height: $height;
-    min-width: $min-width !important;
-    min-height: $min-height;
+    // min-width: $min-width !important;
+    // min-height: $min-height;
     border-radius: $card-border-radius;
     background-size: cover;
     background-position: center center;
     background-color: $primary;
     box-shadow: 0px 3px 20px 0px transparentize($primary, .6);
+    transition: width, height .1s;
 }
 
 .card-menu {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    height: $height;
+    // height: $height;
+    height: 100%;
     width: 100%;
-    min-height: $min-height;
+    // min-height: $min-height;
     color: $white;
     user-select: none;
     cursor: default;
     border-radius: $card-border-radius;
     font-weight: bold;
+    transition: width, height .1s;
 }
 
 .info-button {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     align-items: flex-start;
     background-color: $card-menu;
     background: linear-gradient(to top, transparentize($secondary-gradient, 1) 0%, $light-primary 95%);
@@ -699,17 +655,18 @@ $slider-touch-height: 1.5rem;
     // background-color: transparentize($primary, .2);
     // border-top: 1px solid transparentize($primary, .9);
     color: $lighter-primary;
-    text-shadow: 1px 1px 15px $primary;
+    text-shadow: 0px 1px 15px $primary;
 
     height: 3rem;
     line-height: 3rem;
     border-bottom-right-radius: $card-border-radius;
     border-bottom-left-radius: $card-border-radius;
     img {
-        height: 2rem;
-        margin-top: .5rem;
-        margin-right: 1rem;
+        height: 1.5rem;
+        margin-top: .8rem;
+        margin-right: .5rem;
         border-radius: 50%;
+        box-shadow: 0px 1px 10px 0px $primary;
     }
 }
 
@@ -720,3 +677,5 @@ $slider-touch-height: 1.5rem;
 .tomato-rating {
     align-items: flex-end;
 }
+
+@import 'media-queries.scss';

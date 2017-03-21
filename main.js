@@ -5,6 +5,7 @@ $(document).ready(function () {
 
     var imdbLogo = 'https://d2r1vs3d9006ap.cloudfront.net/public/uploaded_images/9999862/imdbsquarelogo_large.png',
         metacriticLogo = 'http://i.imgur.com/ThgZkgC.png',
+        rottenTomatoesLogo = 'http://i.imgur.com/PbOAh0i.png',
         playButton = 'http://i.imgur.com/Mlij2TP.png',
         fullList = [],
         filteredList = [],
@@ -16,9 +17,10 @@ $(document).ready(function () {
         filters = {
             imdb: [0, 100],
             metacritic: [0, 100],
+            tomatometer: [0, 100],
             year: [1900, 2017]
         },
-        amount = 30,
+        amount = 25,
         numItems = 0;
 
     $.getJSON("test.json", function (json) {
@@ -31,6 +33,7 @@ $(document).ready(function () {
         loadItems();
         $('.spinner').css('display', 'flex');
 
+        handleFilterClosing();
         handleSliders();
         handleCardMenuHover();
         handleMoreInformationButton();
@@ -95,7 +98,8 @@ $(document).ready(function () {
                 maxPatternLength: 32,
                 minMatchCharLength: 1,
                 keys: [
-                    'Title'
+                    'Title',
+                    'Actors'
                 ]
             };
             var fuse = new Fuse(filteredList, options);
@@ -183,7 +187,9 @@ $(document).ready(function () {
             if (!passesGenreFilters(item)) filtered = true;
             if (item.imdbRating < filters.imdb[0] || item.imdbRating > filters.imdb[1]) filtered = true;
             if (item.Metascore < filters.metacritic[0] || item.Metascore > filters.metacritic[1]) filtered = true;
+            if (item.Tomatometer < filters.tomatometer[0] || item.Tomatometer > filters.tomatometer[1]) filtered = true;
             if (isNaN(item.Metascore) && (filters.metacritic[0] > 0 || filters.metacritic[1] < 100)) filtered = true;
+            if (isNaN(item.Tomatometer) && (filters.tomatometer[0] > 0 || filters.tomatometer[1] < 100)) filtered = true;
             if (item.Year < filters.year[0] || item.Year > filters.year[1]) filtered = true;
             if (filtered === false) newList.push(filteredList[i]);
         }
@@ -217,6 +223,7 @@ $(document).ready(function () {
             item.Actors = item.Actors.split(',');
             item.imdbRating = parseInt(parseFloat(item.imdbRating).toFixed(1) * 10);
             item.Metascore = parseInt(item.Metascore);
+            item.Tomatometer = parseInt(item.Tomatometer);
             item.Year = parseInt(item.Year);
             item.Runtime = item.Runtime.substring(0, item.Runtime.indexOf('m'));
             item.Runtime = item.Runtime.substring(0, item.Runtime.length - 1);
@@ -260,6 +267,7 @@ $(document).ready(function () {
     var handleSliders = function() {
         var imdbSlider = document.getElementById('imdb-slider');
         var metacriticSlider = document.getElementById('metacritic-slider');
+        var tomatoMeterSlider = document.getElementById('tomatometer-slider');
         var yearSlider = document.getElementById('year-slider');
 
         noUiSlider.create(imdbSlider, {
@@ -275,6 +283,18 @@ $(document).ready(function () {
         	}
         });
         noUiSlider.create(metacriticSlider, {
+        	start: [ 0, 100 ],
+        	step: 1,
+            margin: 10,
+        	behaviour: 'snap',
+            tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })],
+        	connect: true,
+        	range: {
+        		'min':  0,
+        		'max':  100
+        	}
+        });
+        noUiSlider.create(tomatoMeterSlider, {
         	start: [ 0, 100 ],
         	step: 1,
             margin: 10,
@@ -303,6 +323,7 @@ $(document).ready(function () {
             filters = {
                 imdb: imdbSlider.noUiSlider.get(),
                 metacritic: metacriticSlider.noUiSlider.get(),
+                tomatometer: tomatoMeterSlider.noUiSlider.get(),
                 year: yearSlider.noUiSlider.get()
             };
         };
@@ -314,6 +335,11 @@ $(document).ready(function () {
         });
 
         metacriticSlider.noUiSlider.on('end', function() {
+            updateFilters();
+            updateResults();
+        });
+
+        tomatoMeterSlider.noUiSlider.on('end', function() {
             updateFilters();
             updateResults();
         });
@@ -342,7 +368,12 @@ $(document).ready(function () {
                 </div>`);
             if (!isNaN(item.Metascore)) {
                 $('.card').find('.card-menu#' + id + ' .ratings').append('<img class="metacritic-logo" src="' + metacriticLogo + '"/><span class="metacritic-rating">' + item.Metascore + '</span>');
-                $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '2rem');
+                $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
+            }
+            if (!isNaN(item.Tomatometer)) {
+                $('.card').find('.card-menu#' + id + ' .ratings').append('<img class="rotten-tomatoes-logo" src="' + rottenTomatoesLogo + '"/><span class="rottentomatoes-rating">' + item.Tomatometer + '</span>');
+                $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
+                $('.card').find('.card-menu#' + id + ' .metacritic-rating').css('margin-right', '1rem');
             }
             $('.card').find('.card-menu#' + id).css('display', 'none');
     };
@@ -391,44 +422,19 @@ $(document).ready(function () {
                         </div>
                     </div>
             `);
-            // $('.item-background').find('.item-container').append(
-            //     `<div class="item-upper">
-            //         <div class="item-picture" style="background-image: url(${item.Poster})">
-            //             <div class="trailer" id="${itemId}" style="background-image: url(${playButton})"></div>
-            //         </div>
-            //         <div class="item-main-info">
-            //             <h1 class="item-title">${item.Title}</h1>
-            //             <p class="item-plot">${item.Plot}</p>
-            //             <div class="item-facts">
-            //             <div class="item-fact">Runtime: ${item.Runtime}</div>
-            //             <div class="item-fact">Director: ${item.Director}</div>
-            //             <div class="item-fact">Writer: ${item.Writer}</div>
-            //             <div class="item-fact">Actors: ${item.Actors}</div>
-            //             </div>
-            //         </div>
-            //     </div>
-            //     <div class="item-lower">
-            //         <div class="item-ratings">
-            //             <div class="item-imdb">${item.imdbRating}</div>
-            //             <div class="item-imdb">${item.Metascore}</div>
-            //         </div>
-            //     </div>
-            // `);
-
 
             if (!isNaN(item.Metascore)) {
                 $('.modal-container').find('.modal-content#'+itemId + ' .modal-ratings').append('<img src="' + metacriticLogo + '"/><span class="modal-metacritic-rating">' + item.Metascore + '</span>');
+            }
+
+            if (!isNaN(item.Tomatometer)) {
+                $('.modal-container').find('.modal-content#'+itemId + ' .modal-ratings').append('<img src="' + rottenTomatoesLogo + '"/><span class="modal-rottentomatoes-rating">' + item.Tomatometer + '</span>');
             }
 
             $('.modal-container').fadeIn(200, function() {
                 $('card.menu #' + itemId).fadeOut(10);
                 $(this).css('display', 'flex');
             });
-
-            // $('.item-background').fadeIn(200, function() {
-            //     $('card.menu #' + itemId).fadeOut(10);
-            //     $(this).css('display', 'flex');
-            // });
         });
     };
 
@@ -449,6 +455,43 @@ $(document).ready(function () {
                 }
         });
     };
+
+    var handleFilterClosing = function() {
+        $('.filters-container').on('click', '.filters-close-btn', function() {
+            /**
+             *      This is mess
+             */
+            let duration = 500;
+            let ease = 'easeOutCubic';
+            if ($('.filters').css('left') === '-392px') {
+                $('.filters').animate( {
+                    left: '0'
+                }, duration, ease);
+
+                $('.filters-container').animate( {
+                    padding: '0'
+                }, duration + 200, ease);
+
+                $('.flex-grid').animate({
+                    margin: '0 0 0 26.5rem'
+                }, duration, ease);
+
+            } else {
+                $('.filters').animate( {
+                    left: '-392px'
+                }, duration, ease);
+
+                $('.filters-container').delay(100).animate( {
+                    padding: '0 13rem 0 0'
+                }, duration + 200, ease);
+
+                $('.flex-grid').delay(100).animate({
+                    margin: '0 0 0 3rem'
+                }, duration, ease);
+            }
+        });
+    };
+
 
     var displayTrailer = function() {
         $('.flex-grid').on('click', '.card-trailer', function() {

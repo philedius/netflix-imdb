@@ -1,0 +1,31 @@
+@media (max-width: 1770px) {
+    $height: 23vw;
+    $height: 23vw;
+    .card {
+        height: $height;
+        width: $height * 0.6667 !important;
+    }
+
+    .card-menu {
+          height: $height;
+          width: $height * 0.6667 !important;
+    }
+}
+
+@media (max-width: 1594px) {
+    $height: 21vw;
+    $min-height: 320px;
+    .card {
+        height: $height;
+        min-height: $min-height;
+        width: $height * 0.6667 !important;
+        min-width: $min-height * 0.6667 !important;
+    }
+
+    .card-menu {
+          height: $height;
+          min-height: $min-height;
+          width: $height * 0.6667 !important;
+          min-width: $min-height * 0.6667 !important;
+    }
+}
