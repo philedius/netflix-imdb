@@ -2,7 +2,6 @@
 $('.modal-container').css('display', 'none');
 
 $(document).ready(function () {
-
     var imdbLogo = 'https://d2r1vs3d9006ap.cloudfront.net/public/uploaded_images/9999862/imdbsquarelogo_large.png',
         metacriticLogo = 'http://i.imgur.com/ThgZkgC.png',
         rottenTomatoesLogo = 'http://i.imgur.com/PbOAh0i.png',
