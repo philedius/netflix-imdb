@@ -3,7 +3,6 @@
 $('.modal-container').css('display', 'none');
 
 $(document).ready(function () {
-
     var imdbLogo = 'https://d2r1vs3d9006ap.cloudfront.net/public/uploaded_images/9999862/imdbsquarelogo_large.png',
         metacriticLogo = 'http://i.imgur.com/ThgZkgC.png',
         rottenTomatoesLogo = 'http://i.imgur.com/PbOAh0i.png',
@@ -13,6 +12,7 @@ $(document).ready(function () {
         result = [],
         contentType = 'Everything',
         sortOption = 'imdbRating',
+        filterOpen = false,
         mustContainGenres = [],
         cantContainGenres = ['Documentary', 'Short', 'Animation'],
         filters = {
@@ -24,6 +24,15 @@ $(document).ready(function () {
         amount = 25,
         numItems = 0;
 
+    var w = $('.filters').width();
+    $('.filters').velocity({
+        translateX: -w + 50 + 'px'
+    }, 1);
+
+    $('.filters-container').velocity({
+        translateX: '-200px'
+    }, 1);
+
     $.getJSON("test.json", function (json) {
 
         fullList = json.items;
@@ -31,7 +40,8 @@ $(document).ready(function () {
 
         cleanUpItemsList();
         filterItems(filters);
-        loadItems();
+        // loadItems();
+        updateResults();
         $('.spinner').css('display', 'flex');
 
         handleFilterClosing();
@@ -196,7 +206,7 @@ $(document).ready(function () {
         filterItems(filters);
         $('.flex-grid').empty();
         $('.flex-grid').animate({ scrollTop: 0 });
-        $('.search-result-info h1').empty().append(filteredList.length + ' search results');
+        $('.flex-grid').append('<div class="search-result-info"><h1>' + filteredList.length + ' search results</h1></div>');
         numItems = 0;
         if (filteredList.length !== 0) {
             loadItems();
@@ -413,35 +423,29 @@ $(document).ready(function () {
     };
 
     var handleFilterClosing = function handleFilterClosing() {
-        $('.filters-container').on('click', '.filters-close-btn', function () {
-            /**
-             *      This is mess
-             */
+        $('.filters').on('click', '.filters-close-btn', function () {
             var duration = 500;
             var ease = 'easeOutCubic';
-            if ($('.filters').css('left') === '-392px') {
-                $('.filters').animate({
-                    left: '0'
+            var filtersWidth = $('.filters').width();
+            if (filterOpen) {
+                filterOpen = false;
+                console.log('closing');
+                $('.filters').velocity({
+                    translateX: -filtersWidth + 50 + 'px'
                 }, duration, ease);
 
-                $('.filters-container').animate({
-                    padding: '0'
-                }, duration + 200, ease);
-
-                $('.flex-grid').animate({
-                    margin: '0 0 0 26.5rem'
+                $('.filters-container').velocity({
+                    translateX: '-200px'
                 }, duration, ease);
             } else {
-                $('.filters').animate({
-                    left: '-392px'
+                console.log('opening');
+                filterOpen = true;
+                $('.filters').velocity({
+                    translateX: '0px'
                 }, duration, ease);
 
-                $('.filters-container').delay(100).animate({
-                    padding: '0 13rem 0 0'
-                }, duration + 200, ease);
-
-                $('.flex-grid').delay(100).animate({
-                    margin: '0 0 0 3rem'
+                $('.filters-container').velocity({
+                    translateX: '0px'
                 }, duration, ease);
             }
         });
@@ -485,7 +489,7 @@ $(document).ready(function () {
 
     var loadMoreCardsOnScroll = function loadMoreCardsOnScroll() {
         $(window).scroll(function () {
-            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+            if ($(window).scrollTop() + $(window).height() - $(document).height() > -2) {
                 loadItems();
             }
         });

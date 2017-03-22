@@ -20,14 +20,12 @@
             <div class="iframe-wrapper"><iframe src=""></iframe></div>
         </div>
         <div class="modal-container"><div class="modal"></div></div>
-        <!-- <div class="item-background"><div class="item-container"></div></div> -->
         <div class="container">
-            <div class="filters">
+            <nav id='menu' class="filters">
+                <div class="filters-close-btn">&times;</div>
                 <div class="filters-container">
-                    <div class="filters-close-btn">&times;</div>
                     <div class="search">
                         <input class="search-bar" type="text" name="search" placeholder="Search..." onfocus="this.placeholder = ''">
-                        <!-- <div class="search-results"></div> -->
                     </div>
                     <div class="content-type">
                         <h2>Filter by type of media</h2>
@@ -46,7 +44,7 @@
                     </div>
                     <div class="genres">
                         <h2>Filter by genres</h2>
-                        <div class="check-uncheck-all"><span class="allowed">Can contain</span> &rarr; <span class="selected">Must contain</span> &rarr; <span class="deselected">Can't contain</span></div>
+                        <div class="check-uncheck-all"><span class="allowed">Can be</span> &rarr; <span class="selected">Must be</span> &rarr; <span class="deselected">Can't be</span></div>
                         <div>
                             <span class="button checkbox">Action</span>
                             <span class="button checkbox">Adventure</span>
@@ -79,11 +77,12 @@
                         <h2 class="slider-label">Release year</h2><div class="slider noUi-extended" id="year-slider"></div>
                     </div>
                 </div>
-            </div>
-            <div class="search-result-info">
-                <h1></h1>
-            </div>
-            <div class="flex-grid"></div>
+            </nav>
+            <main id='panel' class="flex-grid">
+                <div class="search-result-info">
+                    <h1>hehehe</h1>
+                </div>
+            </main>
             <div class="loading"><h1><div class="spinner"></div></h1></div>
         </div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
@@ -91,6 +90,7 @@
         <script src="nouislider.min.js"></script>
         <script src="wNumb.js"></script>
         <script src="jquery-ui.min.js"></script>
+        <script src="velocity.min.js"></script>
 		<script src="js/main.js"></script>
 	</body>
 </html>

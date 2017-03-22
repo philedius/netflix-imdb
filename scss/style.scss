@@ -6,8 +6,8 @@ $min-width: $min-height * 0.6667;
 $modal-height: 550px;
 $max-modal-width: 700px;
 $item-info-height: 550;
-$filter-menu-width: 375px;
-$filter-menu-width: 23.5rem;
+$filter-menu-width: 400px;
+$filter-menu-width-margin: $filter-menu-width + 20px;
 $card-border-radius: .5rem;
 
 
@@ -31,6 +31,8 @@ body {
     text-align: center;
     color: $white;
     background-color: $lighter-primary;
+    width: 100%;
+    height: 100%;
 }
 
 .trailer {
@@ -227,6 +229,7 @@ body {
     display: block;
     margin: 2rem 2rem;
     text-align: center;
+    width: 100%;
 }
 
 .filters {
@@ -236,6 +239,7 @@ body {
     }
     z-index: 2;
     overflow-y: scroll;
+    overflow-x: visible;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -245,53 +249,61 @@ body {
     top: 0;
     left: 0;
     width: $filter-menu-width;
+    max-width: 100vw;
     height: 100%;
-    padding: 2rem;
     background: $primary; /* Old browsers */
     background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
-    box-shadow: 1px 0px 20px 0px transparentize($primary, .6);
-
-
+    box-shadow: 0px 4px 10px 0px transparentize($primary, .4);
+    transform: translate(-$filter-menu-width + 30px);
 }
 
 .filters::-webkit-scrollbar-track
 {
     background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
+    display: none;
 }
 
 .filters::-webkit-scrollbar
 {
 	width: 5px;
+    display: none;
 }
 
 .filters::-webkit-scrollbar-thumb
 {
     border-radius: 3px;
 	background-color: $lighter-primary;
+    display: none;
 }
 
 .filters-container {
-    width: 90%;
+    margin-top: 2rem;
+    width: 80%;
     h2 {
         margin: 1rem 0 .3rem 0;
     }
 }
 
 .filters-close-btn {
-    position: absolute;
+    color: $lighter-primary;
+    z-index: 3;
+    position: fixed;
     font-size: 2.5rem;
-    top: 0rem;
-    right: .6rem;
+    top: 0;
+    right: 1rem;
+    // right: -2rem;
     cursor: pointer;
 }
 
 .flex-grid {
+    z-index: 1;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    // margin-left: $filter-menu-width + 40px;
-    margin-left: $filter-menu-width + 2rem;
+    // margin-left: $filter-menu-width-margin;
+     width: 100%;
+    margin-top: 3rem;
 }
 
 .loading {
@@ -299,8 +311,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    // margin-left: $filter-menu-width + 40px;
-    margin-left: $filter-menu-width + 2rem;
+    margin-left: $filter-menu-width-margin;
 }
 
 .spinner {
@@ -340,8 +351,9 @@ $slider-touch-height: 1.5rem;
 
 .search {
     display: flex;
-    width: 100%;
+    width: 90%;
     flex-direction: column;
+    align-self: center;
     align-items: center;
 }
 
@@ -362,19 +374,11 @@ $slider-touch-height: 1.5rem;
     outline: 0;
 }
 
-.search-results {
-    display: none;
-    position: relative;
-    width: 100%;
-    border-bottom-left-radius: .5rem;
-    border-bottom-right-radius: .5rem;
-    font-size: 1rem;
-    padding: .2rem .5rem;
-    // height: 100px;
-    margin: 0;
-    top: -2rem;
-    background-color: $lighter-primary;
-    color: $black;
+.search-result-info {
+    position: absolute;
+    color: $primary;
+    top: -3rem;
+    left: 3rem;
 }
 
 .content-type {
@@ -449,6 +453,7 @@ $slider-touch-height: 1.5rem;
     padding: .45rem 1rem .5rem 1rem;
     margin: .2rem auto;
     user-select: none;
+    overflow: visible;
     // transition: color, background-color .15s;
 }
 
@@ -489,7 +494,6 @@ $slider-touch-height: 1.5rem;
     width: 100%;
     // text-align: left;
     margin-top: 1rem;
-    margin-bottom: 8rem;
 }
 
 .slider {
@@ -677,5 +681,6 @@ $slider-touch-height: 1.5rem;
 .tomato-rating {
     align-items: flex-end;
 }
+
 
 @import 'media-queries.scss';
