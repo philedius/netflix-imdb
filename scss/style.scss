@@ -1,6 +1,6 @@
 $height: 19%;
-$height: 19vw;
-$min-height: 330px;
+$height: 30vw;
+$min-height: 300px;
 $width: $height * 0.6667;
 $min-width: $min-height * 0.6667;
 $modal-height: 550px;
@@ -13,15 +13,17 @@ $card-border-radius: .5rem;
 
 $black: #222;
 $primary: saturate(#212e3b, 10%);
+$primary: saturate(#21353b, 5%);
 // $primary: #2f3b21;
 // $primary: #324558;
 $dark-primary: darken($primary, 5%);
 $light-primary: lighten($primary, 20%);
-$lighter-primary: lighten($primary, 75%);
+$lighter-primary: desaturate(lighten($primary, 75%), 30%);
 $secondary: adjust-hue($light-primary, 150%);
 $primary-gradient: saturate(lighten($primary, 10%), 10%);
 $secondary-gradient: saturate(adjust-hue(lighten($primary, 9%), 10%), 10%);
-// $secondary-gradient: saturate(adjust-hue(lighten($secondary, 10%), -20%), 30%);
+$secondary-gradient: saturate(adjust-hue(lighten($primary, 9%), 10%), 10%);
+// $secondary-gradient: adjust-hue(lighten($secondary, 10%), -20%), 10%;
 $white: #eee;
 $card-menu: $primary;
 
@@ -33,6 +35,7 @@ body {
     background-color: $lighter-primary;
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
 }
 
 .trailer {
@@ -229,7 +232,7 @@ body {
     display: block;
     margin: 2rem 2rem;
     text-align: center;
-    width: 100%;
+    width: 100vw;
 }
 
 .filters {
@@ -260,20 +263,20 @@ body {
 .filters::-webkit-scrollbar-track
 {
     background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
-    display: none;
+    // display: none;
 }
 
 .filters::-webkit-scrollbar
 {
 	width: 5px;
-    display: none;
+    // display: none;
 }
 
 .filters::-webkit-scrollbar-thumb
 {
     border-radius: 3px;
 	background-color: $lighter-primary;
-    display: none;
+    // display: none;
 }
 
 .filters-container {
@@ -288,9 +291,10 @@ body {
     color: $lighter-primary;
     z-index: 3;
     position: fixed;
-    font-size: 2.5rem;
+    font-size: 3rem;
+    padding: 1rem;
     top: 0;
-    right: 1rem;
+    right: 0rem;
     // right: -2rem;
     cursor: pointer;
 }
@@ -299,19 +303,22 @@ body {
     z-index: 1;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    justify-content: center !important;
+    align-items: center !important;
     // margin-left: $filter-menu-width-margin;
-     width: 100%;
-    margin-top: 3rem;
+    margin: 3rem 0rem 10rem 65px;
+    padding: 0;
+    width: 95%;
 }
 
 .loading {
+    z-index: 4;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     margin-left: $filter-menu-width-margin;
+    margin-top: -20rem;
 }
 
 .spinner {
@@ -378,7 +385,7 @@ $slider-touch-height: 1.5rem;
     position: absolute;
     color: $primary;
     top: -3rem;
-    left: 3rem;
+    left: .5rem;
 }
 
 .content-type {
@@ -568,19 +575,20 @@ $slider-touch-height: 1.5rem;
 .noUi-horizontal.noUi-extended .noUi-origin  { right: -32px; }
 
 .card {
-    margin: 1rem 1rem;
+    margin: .5rem;
     display: flex;
     flex-direction: row;
     width: $width !important;
     height: $height;
-    // min-width: $min-width !important;
-    // min-height: $min-height;
+    min-width: $min-width !important;
+    min-height: $min-height;
     border-radius: $card-border-radius;
     background-size: cover;
     background-position: center center;
     background-color: $primary;
     box-shadow: 0px 3px 20px 0px transparentize($primary, .6);
-    transition: width, height .1s;
+    // transition: width, height .1s;
+    transition-duration: 0s;
 }
 
 .card-menu {
@@ -600,7 +608,7 @@ $slider-touch-height: 1.5rem;
 }
 
 .info-button {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     align-items: flex-start;
     background-color: $card-menu;
     background: linear-gradient(to top, transparentize($secondary-gradient, 1) 0%, $light-primary 95%);
@@ -649,7 +657,7 @@ $slider-touch-height: 1.5rem;
     display: flex;
     justify-content: center;
     flex-direction: row;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     background-color: $card-menu;
     // background: linear-gradient(to bottom,  $light-primary 0%,$secondary-gradient 100%);
 

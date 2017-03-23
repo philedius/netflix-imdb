@@ -21,12 +21,12 @@ $(document).ready(function () {
         tomatometer: [0, 100],
         year: [1900, 2017]
     },
-        amount = 25,
+        amount = 16,
         numItems = 0;
 
     var w = $('.filters').width();
     $('.filters').velocity({
-        translateX: -w + 50 + 'px'
+        translateX: -w + 80 + 'px'
     }, 1);
 
     $('.filters-container').velocity({
@@ -41,6 +41,7 @@ $(document).ready(function () {
         cleanUpItemsList();
         filterItems(filters);
         // loadItems();
+        initializeIsotope();
         updateResults();
         $('.spinner').css('display', 'flex');
 
@@ -57,6 +58,14 @@ $(document).ready(function () {
         handleContentTypeFiltering();
         handleSortOptions();
     });
+
+    var initializeIsotope = function initializeIsotope() {
+        $('.flex-grid').isotope({
+            layoutMode: 'fitRows',
+            itemSelector: '.card',
+            transitionDuration: '.3s'
+        });
+    };
 
     var handleContentTypeFiltering = function handleContentTypeFiltering() {
         $('.content-type .radiobutton').on('click', function (e) {
@@ -205,12 +214,12 @@ $(document).ready(function () {
     var updateResults = function updateResults() {
         filterItems(filters);
         $('.flex-grid').empty();
-        $('.flex-grid').animate({ scrollTop: 0 });
         $('.flex-grid').append('<div class="search-result-info"><h1>' + filteredList.length + ' search results</h1></div>');
         numItems = 0;
         if (filteredList.length !== 0) {
             loadItems();
         }
+        $('.search-result-info').velocity('scroll', { container: $(window) });
     };
 
     var cleanUpItemsList = function cleanUpItemsList() {
@@ -235,13 +244,6 @@ $(document).ready(function () {
             item.Runtime = item.Runtime.substring(0, item.Runtime.length - 1);
             item.Runtime = parseInt(item.Runtime);
             if (item.Poster === 'N/A') item.Poster = 'http://i.imgur.com/g2XkPrD.png';
-            // var img = new Image();
-            // img.addEventListener("load", function(){
-            //     if (this.naturalWidth < 250) {
-            //         console.log(item.Title + ': ' + this.naturalWidth +'x'+ this.naturalHeight );
-            //     }
-            // });
-            // img.src = item.Poster;
             if (item.Plot === 'N/A') item.Plot = 'N/A';
             for (var _j = fullList.length - 1; _j >= 0; _j--) {
                 if (item.Title === fullList[_j].Title && i !== _j) {
@@ -359,8 +361,8 @@ $(document).ready(function () {
         var maxLength = 4;
         if (item.Writer.length > maxLength) item.Writer.splice(-(item.Writer.length - maxLength));
         if (item.Director.length > maxLength) item.Director.splice(-(item.Director.length - maxLength));
-
-        $('.flex-grid').append('<div class="card" id="' + id + '" style="background-image: url(' + item.Poster + ')">\n                    <div class="card-menu" id="' + id + '">\n                        <div class="info-button" id="' + id + '">more information</div>\n                        <div class="card-trailer" id="' + id + '" style="background-image: url(' + playButton + ')"></div>\n                        <div class="ratings">\n                            <img class="imdb-logo" src="' + imdbLogo + '"/><span class="imdb-rating">' + item.imdbRating + '</span>\n                        </div>\n                    </div>\n                </div>');
+        var $newCard = $('<div class="card" data-genre="' + item.Genre + '" id="' + id + '" style="background-image: url(' + item.Poster + ')">\n                    <div class="card-menu" id="' + id + '">\n                        <div class="info-button" id="' + id + '">information</div>\n                        <div class="card-trailer" id="' + id + '" style="background-image: url(' + playButton + ')"></div>\n                        <div class="ratings">\n                            <img class="imdb-logo" src="' + imdbLogo + '"/><span class="imdb-rating">' + item.imdbRating + '</span>\n                        </div>\n                    </div>\n                </div>');
+        $('.flex-grid').append($newCard).isotope('appended', $newCard);
         if (!isNaN(item.Metascore)) {
             $('.card').find('.card-menu#' + id + ' .ratings').append('<img class="metacritic-logo" src="' + metacriticLogo + '"/><span class="metacritic-rating">' + item.Metascore + '</span>');
             $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
@@ -370,16 +372,23 @@ $(document).ready(function () {
             $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
             $('.card').find('.card-menu#' + id + ' .metacritic-rating').css('margin-right', '1rem');
         }
-        $('.card').find('.card-menu#' + id).css('display', 'none');
+        if ($('.card').height() > $('.card').width()) {
+            $('.card').find('.card-menu#' + id).css('display', 'none');
+        }
+        if (id === 3) console.log($newCard.attr('data-genre').split(','));
     };
 
     var handleCardMenuHover = function handleCardMenuHover() {
         $('.flex-grid').on('mouseenter', '.card', function () {
-            $(this).find('.card-menu').fadeIn(150);
+            if ($('.card').height() > $('.card').width()) {
+                $(this).find('.card-menu').fadeIn(150);
+            }
         });
 
         $('.flex-grid').on('mouseleave', '.card', function () {
-            $(this).find('.card-menu').fadeOut(150);
+            if ($('.card').height() > $('.card').width()) {
+                $(this).find('.card-menu').fadeOut(150);
+            }
         });
     };
 
@@ -424,28 +433,54 @@ $(document).ready(function () {
 
     var handleFilterClosing = function handleFilterClosing() {
         $('.filters').on('click', '.filters-close-btn', function () {
-            var duration = 500;
+            var duration = 400;
             var ease = 'easeOutCubic';
-            var filtersWidth = $('.filters').width();
+            var filtersTranslateLength = $('.filters').width() - 80;
+            var gridMarginLeft = 65;
             if (filterOpen) {
                 filterOpen = false;
-                console.log('closing');
+                $(this).velocity({
+                    rotateZ: '0deg'
+                });
                 $('.filters').velocity({
-                    translateX: -filtersWidth + 50 + 'px'
+                    translateX: -filtersTranslateLength + 'px'
                 }, duration, ease);
 
                 $('.filters-container').velocity({
                     translateX: '-200px'
                 }, duration, ease);
+
+                $('.flex-grid').velocity({
+                    marginLeft: gridMarginLeft + 'px',
+                    width: '95%'
+                }, {
+                    complete: function complete($element) {
+                        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
+                    }
+                }, duration, ease);
             } else {
-                console.log('opening');
                 filterOpen = true;
+                $(this).velocity({
+                    rotateZ: '180deg'
+                });
                 $('.filters').velocity({
                     translateX: '0px'
                 }, duration, ease);
 
                 $('.filters-container').velocity({
                     translateX: '0px'
+                }, duration, ease);
+                //
+                var widthPercentage = 100 - filtersTranslateLength / $('.container').width() * 100;
+                if (widthPercentage > 100) widthPercentage = 100;
+                console.log(widthPercentage);
+                $('.flex-grid').velocity({
+                    marginLeft: filtersTranslateLength + gridMarginLeft + 'px',
+                    width: widthPercentage - 5 + '%'
+                }, {
+                    complete: function complete($element) {
+                        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
+                    }
                 }, duration, ease);
             }
         });
@@ -476,20 +511,23 @@ $(document).ready(function () {
     };
 
     var loadItems = function loadItems() {
-        $('.loading').show();
         var amnt = amount;
         if (numItems + amount >= filteredList.length) amnt = filteredList.length - numItems;
         for (var i = numItems; i < numItems + amnt; i++) {
             var item = filteredList[i];
             addCard(item, i);
         }
-        $('.loading').hide();
+        // initializeIsotope();
+        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
+        $('.loading').fadeOut();
         numItems += amnt;
+        console.log('i b loadin');
     };
 
     var loadMoreCardsOnScroll = function loadMoreCardsOnScroll() {
         $(window).scroll(function () {
             if ($(window).scrollTop() + $(window).height() - $(document).height() > -2) {
+                $('.loading').fadeIn();
                 loadItems();
             }
         });

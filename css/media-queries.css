@@ -1,21 +1,2 @@
-@media (max-width: 1770px) {
-  .card {
-    height: 23vw;
-    width: 15.3341vw !important; }
-  .card-menu {
-    height: 23vw;
-    width: 15.3341vw !important; } }
-
-@media (max-width: 1594px) {
-  .card {
-    height: 21vw;
-    min-height: 320px;
-    width: 14.0007vw !important;
-    min-width: 213.344px !important; }
-  .card-menu {
-    height: 21vw;
-    min-height: 320px;
-    width: 14.0007vw !important;
-    min-width: 213.344px !important; } }
 
 /*# sourceMappingURL=media-queries.css.map */

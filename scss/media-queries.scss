@@ -1,31 +1,69 @@
-@media (max-width: 1770px) {
-    $height: 23vw;
-    $height: 23vw;
-    .card {
-        height: $height;
-        width: $height * 0.6667 !important;
-    }
+// @media (max-width: 1770px) {
+//     $height: 23vw;
+//     $height: 23vw;
+//     .card {
+//         height: $height;
+//         width: $height * 0.6667 !important;
+//     }
+//
+//     .card-menu {
+//           height: $height;
+//           width: $height * 0.6667 !important;
+//     }
+// }
+//
+// @media (max-width: 1594px) {
+//     $height: 20vw;
+//     $min-height: 320px;
+//     .card {
+//         height: $height;
+//         min-height: $min-height;
+//         width: $height * 0.6667 !important;
+//         min-width: $min-height * 0.6667 !important;
+//     }
+//
+//     .card-menu {
+//           height: $height;
+//           min-height: $min-height;
+//           width: $height * 0.6667 !important;
+//           min-width: $min-height * 0.6667 !important;
+//     }
+// }
 
-    .card-menu {
-          height: $height;
-          width: $height * 0.6667 !important;
-    }
-}
-
-@media (max-width: 1594px) {
-    $height: 21vw;
-    $min-height: 320px;
-    .card {
-        height: $height;
-        min-height: $min-height;
-        width: $height * 0.6667 !important;
-        min-width: $min-height * 0.6667 !important;
-    }
-
-    .card-menu {
-          height: $height;
-          min-height: $min-height;
-          width: $height * 0.6667 !important;
-          min-width: $min-height * 0.6667 !important;
-    }
-}
+// @media (max-width: 425px) {
+//     $height: 44vw;
+//     $min-height: 44vw;
+//     .card {
+//         height: $height;
+//         min-height: $min-height;
+//         width: $height * 0.6667 !important;
+//         min-width: $min-height * 0.6667 !important;
+//     }
+//
+//     .card-menu {
+//         display: flex;
+//         height: $height;
+//         justify-content: flex-end;
+//         min-height: $min-height;
+//         width: $height * 0.6667 !important;
+//         min-width: $min-height * 0.6667 !important;
+//         background-size: cover;
+//     }
+//
+//     .info-button {
+//         display: none;
+//     }
+//
+//     .ratings {
+//         background: none;
+//         img {
+//             box-shadow: 0px 1px 5px 0px black;
+//         }
+//
+//         text-shadow: 0px 1px 3px black;
+//     }
+//
+//     .card-trailer {
+//         display: none;
+//     }
+// }

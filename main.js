@@ -20,17 +20,19 @@ $(document).ready(function () {
             tomatometer: [0, 100],
             year: [1900, 2017]
         },
-        amount = 25,
+        amount = 16,
         numItems = 0;
 
     let w = $('.filters').width();
     $('.filters').velocity({
-        translateX: -w + 50 + 'px'
+        translateX: -w + 80 + 'px'
     }, 1);
 
     $('.filters-container').velocity({
         translateX: '-200px'
     }, 1);
+
+
 
     $.getJSON("test.json", function (json) {
 
@@ -40,6 +42,7 @@ $(document).ready(function () {
         cleanUpItemsList();
         filterItems(filters);
         // loadItems();
+        initializeIsotope();
         updateResults();
         $('.spinner').css('display', 'flex');
 
@@ -55,8 +58,16 @@ $(document).ready(function () {
         handleGenreButtons();
         handleContentTypeFiltering();
         handleSortOptions();
-
     });
+
+    var initializeIsotope = function() {
+        $('.flex-grid').isotope({
+            layoutMode: 'fitRows',
+            itemSelector: '.card',
+            transitionDuration: '.3s'
+        });
+
+    };
 
     var handleContentTypeFiltering = function() {
         $('.content-type .radiobutton').on('click', function(e) {
@@ -208,12 +219,12 @@ $(document).ready(function () {
     var updateResults = function() {
         filterItems(filters);
         $('.flex-grid').empty();
-        $('.flex-grid').animate({scrollTop: 0});
         $('.flex-grid').append('<div class="search-result-info"><h1>' + filteredList.length + ' search results</h1></div>');
         numItems = 0;
         if(filteredList.length !== 0) {
             loadItems();
         }
+        $('.search-result-info').velocity('scroll', { container: $(window) });
     };
 
     var cleanUpItemsList = function() {
@@ -238,13 +249,6 @@ $(document).ready(function () {
             item.Runtime = item.Runtime.substring(0, item.Runtime.length - 1);
             item.Runtime = parseInt(item.Runtime);
             if (item.Poster === 'N/A') item.Poster = 'http://i.imgur.com/g2XkPrD.png';
-            // var img = new Image();
-            // img.addEventListener("load", function(){
-            //     if (this.naturalWidth < 250) {
-            //         console.log(item.Title + ': ' + this.naturalWidth +'x'+ this.naturalHeight );
-            //     }
-            // });
-            // img.src = item.Poster;
             if (item.Plot === 'N/A') item.Plot = 'N/A';
             for (let j = fullList.length - 1; j >= 0; j--) {
                 if (item.Title === fullList[j].Title && i !== j) {
@@ -364,17 +368,17 @@ $(document).ready(function () {
             let maxLength = 4;
             if (item.Writer.length > maxLength) item.Writer.splice(-(item.Writer.length-maxLength));
             if (item.Director.length > maxLength) item.Director.splice(-(item.Director.length-maxLength));
-
-            $('.flex-grid').append(
-                `<div class="card" id="${id}" style="background-image: url(${item.Poster})">
+            let $newCard = $(
+                `<div class="card" data-genre="${item.Genre}" id="${id}" style="background-image: url(${item.Poster})">
                     <div class="card-menu" id="${id}">
-                        <div class="info-button" id="${id}">more information</div>
+                        <div class="info-button" id="${id}">information</div>
                         <div class="card-trailer" id="${id}" style="background-image: url(${playButton})"></div>
                         <div class="ratings">
                             <img class="imdb-logo" src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
                         </div>
                     </div>
                 </div>`);
+            $('.flex-grid').append($newCard).isotope('appended', $newCard);
             if (!isNaN(item.Metascore)) {
                 $('.card').find('.card-menu#' + id + ' .ratings').append('<img class="metacritic-logo" src="' + metacriticLogo + '"/><span class="metacritic-rating">' + item.Metascore + '</span>');
                 $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
@@ -384,17 +388,24 @@ $(document).ready(function () {
                 $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
                 $('.card').find('.card-menu#' + id + ' .metacritic-rating').css('margin-right', '1rem');
             }
-            $('.card').find('.card-menu#' + id).css('display', 'none');
+            if ($('.card').height() > $('.card').width()) {
+                $('.card').find('.card-menu#' + id).css('display', 'none');
+            }
+            if (id === 3) console.log($newCard.attr('data-genre').split(','));
     };
 
     var handleCardMenuHover = function() {
         $('.flex-grid').on('mouseenter', '.card', function() {
-            $(this).find('.card-menu').fadeIn(150);
+            if ($('.card').height() > $('.card').width()) {
+                $(this).find('.card-menu').fadeIn(150);
+            }
 
         });
 
         $('.flex-grid').on('mouseleave', '.card', function() {
-            $(this).find('.card-menu').fadeOut(150);
+            if ($('.card').height() > $('.card').width()) {
+                $(this).find('.card-menu').fadeOut(150);
+            }
         });
     };
 
@@ -467,28 +478,54 @@ $(document).ready(function () {
 
     var handleFilterClosing = function() {
         $('.filters').on('click', '.filters-close-btn', function() {
-            let duration = 500;
+            let duration = 400;
             let ease = 'easeOutCubic';
-            let filtersWidth = $('.filters').width();
+            let filtersTranslateLength = $('.filters').width() - 80;
+            let gridMarginLeft = 65;
             if (filterOpen) {
                 filterOpen = false;
-                console.log('closing');
+                $(this).velocity({
+                    rotateZ: '0deg'
+                });
                 $('.filters').velocity({
-                    translateX: -filtersWidth + 50 + 'px'
+                    translateX: -filtersTranslateLength + 'px'
                 }, duration, ease);
 
                 $('.filters-container').velocity({
                     translateX: '-200px'
                 }, duration, ease);
+
+                $('.flex-grid').velocity({
+                    marginLeft: gridMarginLeft + 'px',
+                    width: '95%'
+                }, {
+                    complete: function($element) {
+                        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
+                    }
+                }, duration, ease);
             } else {
-                console.log('opening');
                 filterOpen = true;
+                $(this).velocity({
+                    rotateZ: '180deg'
+                });
                 $('.filters').velocity({
                     translateX: '0px'
                 }, duration, ease);
 
                 $('.filters-container').velocity({
                     translateX: '0px'
+                }, duration, ease);
+                //
+                let widthPercentage = 100 - (filtersTranslateLength / $('.container').width() * 100);
+                if (widthPercentage > 100) widthPercentage = 100;
+                console.log(widthPercentage);
+                $('.flex-grid').velocity({
+                    marginLeft: filtersTranslateLength + gridMarginLeft + 'px',
+                    width: widthPercentage - 5 + '%'
+                }, {
+                    complete: function($element) {
+                        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
+                    }
                 }, duration, ease);
             }
         });
@@ -520,20 +557,23 @@ $(document).ready(function () {
     };
 
     var loadItems = function() {
-        $('.loading').show();
         let amnt = amount;
         if (numItems + amount >= filteredList.length) amnt = filteredList.length - numItems;
         for (let i = numItems; i < numItems + amnt; i++) {
             let item = filteredList[i];
             addCard(item, i);
         }
-        $('.loading').hide();
+        // initializeIsotope();
+        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
+        $('.loading').fadeOut();
         numItems += amnt;
+        console.log('i b loadin');
     };
 
     var loadMoreCardsOnScroll = function() {
         $(window).scroll(function () {
             if($(window).scrollTop() + $(window).height() - $(document).height() > -2) {
+                $('.loading').fadeIn();
                 loadItems();
 
             }
