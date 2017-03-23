@@ -21,7 +21,7 @@ $(document).ready(function () {
         tomatometer: [0, 100],
         year: [1900, 2017]
     },
-        amount = 16,
+        amount = 30,
         numItems = 0;
 
     var w = $('.filters').width();
@@ -63,7 +63,7 @@ $(document).ready(function () {
         $('.flex-grid').isotope({
             layoutMode: 'fitRows',
             itemSelector: '.card',
-            transitionDuration: '.3s'
+            transitionDuration: '.4s'
         });
     };
 
@@ -244,7 +244,7 @@ $(document).ready(function () {
             item.Runtime = item.Runtime.substring(0, item.Runtime.length - 1);
             item.Runtime = parseInt(item.Runtime);
             if (item.Poster === 'N/A') item.Poster = 'http://i.imgur.com/g2XkPrD.png';
-            if (item.Plot === 'N/A') item.Plot = 'N/A';
+            if (item.Plot === 'N/A') item.Plot = 'No plot description available.';
             for (var _j = fullList.length - 1; _j >= 0; _j--) {
                 if (item.Title === fullList[_j].Title && i !== _j) {
                     fullList.splice(_j, 1);
@@ -261,6 +261,27 @@ $(document).ready(function () {
                 if (titleA < titleB) return -1;
                 if (titleA > titleB) return 1;
                 return 0;
+            });
+            return;
+        }
+
+        if (sortParameter === 'Average') {
+            filteredList.sort(function (a, b) {
+                var aScores = [];
+                var bScores = [];
+                aScores.push(a.imdbRating);
+                bScores.push(b.imdbRating);
+                if (!isNaN(a.Metascore)) aScores.push(a.Metascore);
+                if (!isNaN(a.Tomatometer)) aScores.push(a.Tomatometer);
+                if (!isNaN(b.Metascore)) bScores.push(b.Metascore);
+                if (!isNaN(b.Tomatometer)) bScores.push(b.Tomatometer);
+                var aAverage = aScores.reduce(function (a, b) {
+                    return a + b;
+                }, 0) / aScores.length;
+                var bAverage = bScores.reduce(function (a, b) {
+                    return a + b;
+                }, 0) / bScores.length;
+                return bAverage - aAverage;
             });
             return;
         }
@@ -361,7 +382,7 @@ $(document).ready(function () {
         var maxLength = 4;
         if (item.Writer.length > maxLength) item.Writer.splice(-(item.Writer.length - maxLength));
         if (item.Director.length > maxLength) item.Director.splice(-(item.Director.length - maxLength));
-        var $newCard = $('<div class="card" data-genre="' + item.Genre + '" id="' + id + '" style="background-image: url(' + item.Poster + ')">\n                    <div class="card-menu" id="' + id + '">\n                        <div class="info-button" id="' + id + '">information</div>\n                        <div class="card-trailer" id="' + id + '" style="background-image: url(' + playButton + ')"></div>\n                        <div class="ratings">\n                            <img class="imdb-logo" src="' + imdbLogo + '"/><span class="imdb-rating">' + item.imdbRating + '</span>\n                        </div>\n                    </div>\n                </div>');
+        var $newCard = $('<div class="card" data-original="' + item.Poster + '" data-genre="' + item.Genre + '" id="' + id + '" style="background-image: url(' + item.Poster + ')">\n                    <div class="card-menu" id="' + id + '">\n                        <div class="info-button" id="' + id + '">information</div>\n                        <div class="card-trailer" id="' + id + '" style="background-image: url(' + playButton + ')"></div>\n                        <div class="ratings">\n                            <img class="imdb-logo" src="' + imdbLogo + '"/><span class="imdb-rating">' + item.imdbRating + '</span>\n                        </div>\n                    </div>\n                </div>');
         $('.flex-grid').append($newCard).isotope('appended', $newCard);
         if (!isNaN(item.Metascore)) {
             $('.card').find('.card-menu#' + id + ' .ratings').append('<img class="metacritic-logo" src="' + metacriticLogo + '"/><span class="metacritic-rating">' + item.Metascore + '</span>');
@@ -517,7 +538,6 @@ $(document).ready(function () {
             var item = filteredList[i];
             addCard(item, i);
         }
-        // initializeIsotope();
         $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
         $('.loading').fadeOut();
         numItems += amnt;

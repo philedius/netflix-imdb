@@ -20,7 +20,7 @@ $(document).ready(function () {
             tomatometer: [0, 100],
             year: [1900, 2017]
         },
-        amount = 16,
+        amount = 30,
         numItems = 0;
 
     let w = $('.filters').width();
@@ -31,8 +31,6 @@ $(document).ready(function () {
     $('.filters-container').velocity({
         translateX: '-200px'
     }, 1);
-
-
 
     $.getJSON("test.json", function (json) {
 
@@ -58,13 +56,14 @@ $(document).ready(function () {
         handleGenreButtons();
         handleContentTypeFiltering();
         handleSortOptions();
+
     });
 
     var initializeIsotope = function() {
         $('.flex-grid').isotope({
             layoutMode: 'fitRows',
             itemSelector: '.card',
-            transitionDuration: '.3s'
+            transitionDuration: '.4s'
         });
 
     };
@@ -249,7 +248,7 @@ $(document).ready(function () {
             item.Runtime = item.Runtime.substring(0, item.Runtime.length - 1);
             item.Runtime = parseInt(item.Runtime);
             if (item.Poster === 'N/A') item.Poster = 'http://i.imgur.com/g2XkPrD.png';
-            if (item.Plot === 'N/A') item.Plot = 'N/A';
+            if (item.Plot === 'N/A') item.Plot = 'No plot description available.';
             for (let j = fullList.length - 1; j >= 0; j--) {
                 if (item.Title === fullList[j].Title && i !== j) {
                     fullList.splice(j, 1);
@@ -266,6 +265,23 @@ $(document).ready(function () {
                 if (titleA < titleB) return -1;
                 if (titleA > titleB) return 1;
                 return 0;
+            });
+            return;
+        }
+
+        if (sortParameter === 'Average') {
+            filteredList.sort(function(a, b) {
+                let aScores = [];
+                let bScores = [];
+                aScores.push(a.imdbRating);
+                bScores.push(b.imdbRating);
+                if (!isNaN(a.Metascore)) aScores.push(a.Metascore);
+                if (!isNaN(a.Tomatometer)) aScores.push(a.Tomatometer);
+                if (!isNaN(b.Metascore)) bScores.push(b.Metascore);
+                if (!isNaN(b.Tomatometer)) bScores.push(b.Tomatometer);
+                let aAverage = aScores.reduce(function(a, b) { return a + b; }, 0) / aScores.length;
+                let bAverage = bScores.reduce(function(a, b) { return a + b; }, 0) / bScores.length;
+                return bAverage - aAverage;
             });
             return;
         }
@@ -369,7 +385,7 @@ $(document).ready(function () {
             if (item.Writer.length > maxLength) item.Writer.splice(-(item.Writer.length-maxLength));
             if (item.Director.length > maxLength) item.Director.splice(-(item.Director.length-maxLength));
             let $newCard = $(
-                `<div class="card" data-genre="${item.Genre}" id="${id}" style="background-image: url(${item.Poster})">
+                `<div class="card" data-original="${item.Poster}" data-genre="${item.Genre}" id="${id}" style="background-image: url(${item.Poster})">
                     <div class="card-menu" id="${id}">
                         <div class="info-button" id="${id}">information</div>
                         <div class="card-trailer" id="${id}" style="background-image: url(${playButton})"></div>
@@ -563,7 +579,6 @@ $(document).ready(function () {
             let item = filteredList[i];
             addCard(item, i);
         }
-        // initializeIsotope();
         $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
         $('.loading').fadeOut();
         numItems += amnt;
