@@ -31,8 +31,15 @@ $(document).ready(function () {
     $('.filters-container').velocity({
         translateX: '-200px'
     }, 1);
+    var timer;
+    $(window).resize(function() {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+            calculateCardSize();
+        }, 300);
+    });
 
-    $.getJSON("test.json", function (json) {
+    $.getJSON("test_copy.json", function (json) {
 
         fullList = json.items;
         filteredList = json.items;
@@ -62,10 +69,9 @@ $(document).ready(function () {
     var initializeIsotope = function() {
         $('.flex-grid').isotope({
             layoutMode: 'fitRows',
-            itemSelector: '.card',
-            transitionDuration: '.4s'
+            itemSelector: '.card-information',
+            transitionDuration: '.3s'
         });
-
     };
 
     var handleContentTypeFiltering = function() {
@@ -104,10 +110,53 @@ $(document).ready(function () {
             }
             e.stopPropagation();
             updateResults();
+
+            /**
+             *      Isotope filtering
+             */
+            // var requiredGenres = [];
+            // $('.checkbox-selected').each(function() {
+            //     requiredGenres.push($(this).text());
+            // });
+            // var hasRequiredGenres = false;
+            // $('.flex-grid').isotope({ filter: function() {
+            //   var id = $(this).attr('id');
+            //   var itemGenres = filteredList[id].Genre;
+            //   var requiredGenreCount = 0;
+            //   for (let i = 0; i < itemGenres.length; i++) {
+            //       if (requiredGenres.includes(itemGenres[i])) requiredGenreCount++;
+            //   }
+            //   hasRequiredGenres = requiredGenreCount === requiredGenres.length;
+            //   return hasRequiredGenres;
+            // }});
+            // loadItems();
         });
     };
 
+    var calculateCardSize = function() {
+        let gridWidth = $('.flex-grid').width();
+        let numCardsInRow = 6;
+        let marginAllowance = 160; // todo: know what this is
+        if (gridWidth < 1600) numCardsInRow = 5;
+        if (gridWidth < 1300) numCardsInRow = 4;
+        if (gridWidth < 1060) numCardsInRow = 3;
+        if (gridWidth < 800) numCardsInRow = 2;
+        if (gridWidth < 350) numCardsInRow = 1;
+        let newWidth =  (gridWidth / numCardsInRow) - marginAllowance / numCardsInRow;
+        let newHeight = newWidth / 0.6667;
+        let duration = 10;
+        let ease = 'easeOutCubic';
+        console.log(newWidth, newHeight, gridWidth);
+        $('.card').velocity({
+            width: newWidth + 'px !important;',
+            height: newHeight + 'px'
+        }, { complete: function() {
+            $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
+        } }, duration, ease);
+    };
+
     var handleSearchBar = function() {
+        var timer;
         $('.search-bar').on('input', function() {
             filteredList = fullList;
             var options = {
@@ -124,9 +173,14 @@ $(document).ready(function () {
             };
             var fuse = new Fuse(filteredList, options);
             result = fuse.search($(this).val());
-            if ($.trim($(this).val()).length > 0) {
-                updateResults();
-            }
+            var searchQueryLength = $.trim($(this).val()).length;
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+                console.log('bla');
+                if (searchQueryLength > 0) {
+                    updateResults();
+                }
+            }, 200);
         });
 
         $('.search-bar').keyup(function() {
@@ -218,7 +272,7 @@ $(document).ready(function () {
     var updateResults = function() {
         filterItems(filters);
         $('.flex-grid').empty();
-        $('.flex-grid').append('<div class="search-result-info"><h1>' + filteredList.length + ' search results</h1></div>');
+        $('.flex-grid').append('<div class="search-result-info"><h1>' + filteredList.length + ' results</h1></div>');
         numItems = 0;
         if(filteredList.length !== 0) {
             loadItems();
@@ -385,7 +439,8 @@ $(document).ready(function () {
             if (item.Writer.length > maxLength) item.Writer.splice(-(item.Writer.length-maxLength));
             if (item.Director.length > maxLength) item.Director.splice(-(item.Director.length-maxLength));
             let $newCard = $(
-                `<div class="card" data-original="${item.Poster}" data-genre="${item.Genre}" id="${id}" style="background-image: url(${item.Poster})">
+                `<div class="card-information">
+                <div class="card" data-original="${item.Poster}" data-genre="${item.Genre}" id="${id}" style="background-image: url(${item.Poster})">
                     <div class="card-menu" id="${id}">
                         <div class="info-button" id="${id}">information</div>
                         <div class="card-trailer" id="${id}" style="background-image: url(${playButton})"></div>
@@ -393,6 +448,7 @@ $(document).ready(function () {
                             <img class="imdb-logo" src="${imdbLogo}"/><span class="imdb-rating">${item.imdbRating}</span>
                         </div>
                     </div>
+                </div>
                 </div>`);
             $('.flex-grid').append($newCard).isotope('appended', $newCard);
             if (!isNaN(item.Metascore)) {
@@ -407,20 +463,19 @@ $(document).ready(function () {
             if ($('.card').height() > $('.card').width()) {
                 $('.card').find('.card-menu#' + id).css('display', 'none');
             }
-            if (id === 3) console.log($newCard.attr('data-genre').split(','));
     };
 
     var handleCardMenuHover = function() {
         $('.flex-grid').on('mouseenter', '.card', function() {
             if ($('.card').height() > $('.card').width()) {
-                $(this).find('.card-menu').fadeIn(150);
+                $(this).find('.card-menu').fadeIn(50);
             }
 
         });
 
         $('.flex-grid').on('mouseleave', '.card', function() {
             if ($('.card').height() > $('.card').width()) {
-                $(this).find('.card-menu').fadeOut(150);
+                $(this).find('.card-menu').fadeOut(50);
             }
         });
     };
@@ -494,10 +549,10 @@ $(document).ready(function () {
 
     var handleFilterClosing = function() {
         $('.filters').on('click', '.filters-close-btn', function() {
-            let duration = 400;
+            let duration = 500;
             let ease = 'easeOutCubic';
             let filtersTranslateLength = $('.filters').width() - 80;
-            let gridMarginLeft = 65;
+            let gridMarginLeft = 100;
             if (filterOpen) {
                 filterOpen = false;
                 $(this).velocity({
@@ -513,12 +568,13 @@ $(document).ready(function () {
 
                 $('.flex-grid').velocity({
                     marginLeft: gridMarginLeft + 'px',
-                    width: '95%'
-                }, {
-                    complete: function($element) {
-                        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
-                    }
-                }, duration, ease);
+                    width: '90%'
+                }, { complete: function() {
+
+                    calculateCardSize();
+                } }, duration, ease);
+
+
             } else {
                 filterOpen = true;
                 $(this).velocity({
@@ -530,19 +586,18 @@ $(document).ready(function () {
 
                 $('.filters-container').velocity({
                     translateX: '0px'
-                }, duration, ease);
+                }, duration + 100, ease);
                 //
                 let widthPercentage = 100 - (filtersTranslateLength / $('.container').width() * 100);
                 if (widthPercentage > 100) widthPercentage = 100;
                 console.log(widthPercentage);
                 $('.flex-grid').velocity({
                     marginLeft: filtersTranslateLength + gridMarginLeft + 'px',
-                    width: widthPercentage - 5 + '%'
-                }, {
-                    complete: function($element) {
-                        $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
-                    }
-                }, duration, ease);
+                    width: widthPercentage - 10 + '%'
+                },{ complete: function() {
+
+                    calculateCardSize();
+                } }, duration, ease);
             }
         });
     };
