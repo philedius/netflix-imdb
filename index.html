@@ -46,7 +46,7 @@
                     </div>
                     <div class="genres">
                         <h2>Filter by genres</h2>
-                        <div class="check-uncheck-all"><span class="allowed">Can be</span> &rarr; <span class="selected">Must be</span> &rarr; <span class="deselected">Can't be</span></div>
+                        <div class="check-uncheck-all"><span class="allowed">Can include</span> &rarr; <span class="selected">Must include</span> &rarr; <span class="deselected">Exclude</span></div>
                         <div>
                             <span class="button checkbox">Action</span>
                             <span class="button checkbox">Adventure</span>
@@ -73,10 +73,10 @@
                         </div>
                     </div>
                     <div class="sliders">
-                        <h2 class="slider-label">IMDB</h2><div class="slider noUi-extended" id="imdb-slider"></div>
-                        <h2 class="slider-label">Metacritic</h2><div class="slider noUi-extended" id="metacritic-slider"></div>
-                        <h2 class="slider-label">Rotten Tomatoes</h2><div class="slider noUi-extended" id="tomatometer-slider"></div>
-                        <h2 class="slider-label">Release year</h2><div class="slider noUi-extended" id="year-slider"></div>
+                        <h2 class="slider-label" id="imdb">IMDB<span class="slider-range">0 - 100</span></h2><div class="slider noUi-extended" id="imdb-slider"></div>
+                        <h2 class="slider-label" id="metacritic">Metacritic<span class="slider-range">0 - 100</span></h2><div class="slider noUi-extended" id="metacritic-slider"></div>
+                        <h2 class="slider-label" id="tomatometer">Rotten Tomatoes<span class="slider-range">0 - 100</span></h2><div class="slider noUi-extended" id="tomatometer-slider"></div>
+                        <h2 class="slider-label" id="year">Release year<span class="slider-range">1900 - 2017</span></h2><div class="slider noUi-extended" id="year-slider"></div>
                     </div>
                 </div>
             </nav>

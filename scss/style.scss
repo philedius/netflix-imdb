@@ -12,23 +12,36 @@ $item-info-height: 550;
 $filter-menu-width: 400px;
 $filter-menu-width-margin: $filter-menu-width + 20px;
 $card-border-radius: .5rem;
+$card-border-radius: .1rem;
+$filters-border-radius: .1rem;
 
 
 $black: #222;
 $primary: saturate(#212e3b, 10%);
-$primary: saturate(#21353b, 5%);
+$primary: saturate(#22343e, 10%);
+// $primary: saturate(#3b212e, 10%);
 // $primary: #2f3b21;
 // $primary: #324558;
 $dark-primary: darken($primary, 5%);
-$light-primary: lighten($primary, 20%);
+$light-primary: lighten($primary, 25%);
 $lighter-primary: desaturate(lighten($primary, 75%), 30%);
-$secondary: adjust-hue($light-primary, 150%);
-$primary-gradient: saturate(lighten($primary, 10%), 10%);
-$secondary-gradient: saturate(adjust-hue(lighten($primary, 9%), 10%), 10%);
-$secondary-gradient: saturate(adjust-hue(lighten($primary, 9%), 10%), 10%);
+$secondary: adjust-hue(darken($light-primary, 7.5%), 240%);
+$secondary: adjust-hue(darken($light-primary, 7.5%), 130%);
+$primary-gradient: saturate(lighten($primary, 20%), 10%);
+$secondary-gradient: saturate(adjust-hue(lighten($primary, 10%), 20%), 10%);
+// $secondary-gradient: saturate(adjust-hue(lighten($secondary, 9%), 100%), 10%);
 // $secondary-gradient: adjust-hue(lighten($secondary, 10%), -20%), 10%;
 $white: #eee;
 $card-menu: $primary;
+
+// greyscale
+// $primary: desaturate($primary, 100%);
+// $secondary: desaturate($secondary, 100%);
+// $dark-primary: desaturate($dark-primary, 100%);
+// $light-primary: desaturate($light-primary, 100%);
+// $lighter-primary: desaturate($lighter-primary, 100%);
+// $primary-gradient: desaturate($primary-gradient, 100%);
+// $secondary-gradient: desaturate($secondary-gradient, 100%);
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
@@ -267,7 +280,7 @@ body {
 .filters::-webkit-scrollbar-track
 {
     background: linear-gradient(to bottom,  $primary-gradient 0%,$secondary-gradient 100%);
-    // display: none;
+    display: none;
 }
 
 .filters::-webkit-scrollbar
@@ -278,7 +291,7 @@ body {
 
 .filters::-webkit-scrollbar-thumb
 {
-    border-radius: 3px;
+    border-radius: $filters-border-radius;
 	background-color: $lighter-primary;
     // display: none;
 }
@@ -297,9 +310,8 @@ body {
     position: fixed;
     font-size: 3rem;
     padding: 1rem;
-    top: 4rem;
+    top: 1rem;
     right: 0rem;
-    // right: -2rem;
     cursor: pointer;
 }
 
@@ -309,7 +321,6 @@ body {
     flex-wrap: wrap;
     justify-content: center !important;
     align-items: center !important;
-    // margin-left: $filter-menu-width-margin;
     margin: 8rem 0rem 10rem 100px;
     padding: 0;
     width: 90%;
@@ -356,10 +367,6 @@ body {
     }
 }
 
-$slider-width: 1.5rem;
-$slider-height: .5rem;
-$slider-touch-height: 1.5rem;
-
 .search {
     display: flex;
     width: 90%;
@@ -370,11 +377,11 @@ $slider-touch-height: 1.5rem;
 
 .search-bar {
     width: 100%;
-    height: 2em;
-    border-radius: 1rem;
+    height: 1.5em;
+    border-radius: $filters-border-radius;
     border: none;
     font-size: 1rem;
-    padding: .3rem 1rem;
+    padding: .2rem 1rem;
     margin: 1rem 0;
     background-color: $lighter-primary;
     color: $black;
@@ -409,9 +416,9 @@ $slider-touch-height: 1.5rem;
     font-size: .8rem;
     display: inline-block;
     background-color: $light-primary;
-    border-radius: .5rem;
-    padding: .25rem .45rem;
-    margin: .2rem;
+    border-radius: $filters-border-radius;
+    padding: .1rem .4rem .2rem .4rem;
+    margin: .1rem .1rem;
     user-select: none;
     transition: color, background-color .15s;
 }
@@ -463,12 +470,8 @@ $slider-touch-height: 1.5rem;
     width: 60%;
     font-size: .8rem;
     display: inline-block;
-    border-radius: .5rem;
-    padding: .45rem 1rem .5rem 1rem;
-    margin: .2rem auto;
+    padding: .5rem 0;
     user-select: none;
-    overflow: visible;
-    // transition: color, background-color .15s;
 }
 
 .check-uncheck-all:hover {
@@ -481,12 +484,13 @@ $slider-touch-height: 1.5rem;
 
 .check-uncheck-all {
     width: 95%;
-    margin: .5rem auto;
     span {
-        border-radius: .5rem;
-        padding: .25rem .55rem .3rem .55rem;
-        // padding: .1rem .5rem .2rem .5rem;
-        margin: 0 .1rem;
+        font-size: .8rem;
+        display: inline-block;
+        border-radius: $filters-border-radius;
+        padding: .1rem .4rem .2rem .4rem;
+        margin: 0rem .1rem .1rem .1rem;
+        user-select: none;
     }
 }
 
@@ -503,37 +507,33 @@ $slider-touch-height: 1.5rem;
     background-color: $secondary;
 }
 
+$slider-width: 1.5rem;
+$slider-height: .5rem;
+$slider-touch-height: 1.5rem;
 
 .sliders {
+    text-align: left;
     width: 100%;
-    // text-align: left;
     margin-top: 1rem;
 }
 
 .slider {
-    // min-width: $width;
     margin: 0 auto;
-    margin-bottom: 3.5rem;
+    margin-top: .5rem;
+    margin-bottom: 1.75rem;
 }
 
 .slider-label {
     margin: 1rem 0 1rem 0;
 }
 
-.noUi-tooltip {
-    position:fixed;
-    top: 1.7rem;
-    height: 1.7rem;
-    border: 0;
-    border-radius: .5rem;
-    text-align: center;
-    background: $light-primary;
-    color: $white;
-    font-size: 1rem;
-    padding: .2rem .5rem .3rem .5rem;
+.slider-range {
+    float: right;
+    font-size: .8rem;
+    background-color: $light-primary;
+    border-radius: $filters-border-radius;
+    padding: .03rem .6rem .1rem .6rem;
 }
-
-
 
 .noUi-target {
     background: $primary;
@@ -544,7 +544,6 @@ $slider-touch-height: 1.5rem;
 }
 
 .noUi-base {
-    // background: rgba(255, 0, 255, .05);
     border: 0;
     top: -(1 * $slider-height); // 3 is slider-touch-height
     height: $slider-touch-height;
@@ -559,10 +558,10 @@ $slider-touch-height: 1.5rem;
     box-shadow: none;
     border: 0;
     border-radius: 50%;
-    width: $slider-width !important;
-    height: $slider-width !important;
+    width: $slider-height * 2 !important;
+    height: $slider-height * 2 !important;
     left: 0 !important;
-    top: -$slider-width / 3 !important;
+    top: -$slider-height / 2 !important;
 }
 
 .noUi-connect {
@@ -584,20 +583,16 @@ $slider-touch-height: 1.5rem;
 
 .card {
     margin: .75rem;
+    margin: .5rem;
     display: flex;
     flex-direction: row;
     width: $width;
     height: $height;
-    // min-width: $min-width !important;
-    // min-height: $min-height;
-    // max-width: $max-width !important;
-    // max-height: $max-height;
     border-radius: $card-border-radius;
     background-size: cover;
     background-position: center center;
     background-color: $primary;
     box-shadow: 0px 3px 20px 0px transparentize($primary, .6);
-    // transition: width, height .1s;
     transition-duration: 0s;
 }
 
@@ -605,10 +600,8 @@ $slider-touch-height: 1.5rem;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    // height: $height;
     height: 100%;
     width: 100%;
-    // min-height: $min-height;
     color: $white;
     user-select: none;
     cursor: default;
@@ -622,12 +615,8 @@ $slider-touch-height: 1.5rem;
     align-items: flex-start;
     background-color: $card-menu;
     background: linear-gradient(to top, transparentize($secondary-gradient, 1) 0%, $light-primary 95%);
-
-    // background-color: transparentize($primary, .2);
-    // border-bottom: 1px solid transparentize($primary, .9);
     color: $lighter-primary;
     text-shadow: 1px 1px 15px $primary;
-
     text-transform: uppercase;
     padding: .5rem .5rem .5rem .5rem;
     height: 3rem;

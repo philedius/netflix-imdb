@@ -4,9 +4,9 @@ $('.modal-container').css('display', 'none');
 
 $(document).ready(function () {
     var imdbLogo = 'https://d2r1vs3d9006ap.cloudfront.net/public/uploaded_images/9999862/imdbsquarelogo_large.png',
-        metacriticLogo = 'http://i.imgur.com/ThgZkgC.png',
-        rottenTomatoesLogo = 'http://i.imgur.com/PbOAh0i.png',
-        playButton = 'http://i.imgur.com/Mlij2TP.png',
+        metacriticLogo = 'https://i.imgur.com/ThgZkgC.png',
+        rottenTomatoesLogo = 'https://i.imgur.com/PbOAh0i.png',
+        playButton = 'https://i.imgur.com/Mlij2TP.png',
         fullList = [],
         filteredList = [],
         result = [],
@@ -21,8 +21,10 @@ $(document).ready(function () {
         tomatometer: [0, 100],
         year: [1900, 2017]
     },
-        amount = 30,
-        numItems = 0;
+        amount = 60,
+        numItems = 0,
+        cardHeight = 300,
+        cardWidth = cardHeight * 0.6667;
 
     var w = $('.filters').width();
     $('.filters').velocity({
@@ -69,7 +71,7 @@ $(document).ready(function () {
     var initializeIsotope = function initializeIsotope() {
         $('.flex-grid').isotope({
             layoutMode: 'fitRows',
-            itemSelector: '.card-information',
+            itemSelector: '.card',
             transitionDuration: '.3s'
         });
     };
@@ -83,6 +85,13 @@ $(document).ready(function () {
             }
             e.stopPropagation();
             updateResults();
+            // $('.flex-grid').isotope({ filter: function() {
+            //     var id = $(this).attr('id');
+            //     if (filteredList[id].Type === 'movie' && contentType === 'Movies') return true;
+            //     if (filteredList[id].Type === 'series' && contentType === 'TV shows') return true;
+            //     if (contentType === 'Everything') return true;
+            //     return false;
+            // }});
         });
     };
 
@@ -125,6 +134,7 @@ $(document).ready(function () {
             //   var requiredGenreCount = 0;
             //   for (let i = 0; i < itemGenres.length; i++) {
             //       if (requiredGenres.includes(itemGenres[i])) requiredGenreCount++;
+            //       if (requiredGenreCount === requiredGenres.length) break;
             //   }
             //   hasRequiredGenres = requiredGenreCount === requiredGenres.length;
             //   return hasRequiredGenres;
@@ -141,18 +151,21 @@ $(document).ready(function () {
         if (gridWidth < 1300) numCardsInRow = 4;
         if (gridWidth < 1060) numCardsInRow = 3;
         if (gridWidth < 800) numCardsInRow = 2;
-        if (gridWidth < 350) numCardsInRow = 1;
         var newWidth = gridWidth / numCardsInRow - marginAllowance / numCardsInRow;
+        if (gridWidth < 600) {
+            newWidth = gridWidth - marginAllowance / 2;
+        }
         var newHeight = newWidth / 0.6667;
         var duration = 10;
         var ease = 'easeOutCubic';
-        console.log(newWidth, newHeight, gridWidth);
         $('.card').velocity({
             width: newWidth + 'px !important;',
             height: newHeight + 'px'
         }, { complete: function complete() {
                 $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
             } }, duration, ease);
+        cardHeight = newHeight;
+        cardWidth = newWidth;
     };
 
     var handleSearchBar = function handleSearchBar() {
@@ -298,7 +311,7 @@ $(document).ready(function () {
             item.Runtime = item.Runtime.substring(0, item.Runtime.indexOf('m'));
             item.Runtime = item.Runtime.substring(0, item.Runtime.length - 1);
             item.Runtime = parseInt(item.Runtime);
-            if (item.Poster === 'N/A') item.Poster = 'http://i.imgur.com/g2XkPrD.png';
+            if (item.Poster === 'N/A') item.Poster = 'https://i.imgur.com/g2XkPrD.png';
             if (item.Plot === 'N/A') item.Plot = 'No plot description available.';
             for (var _j = fullList.length - 1; _j >= 0; _j--) {
                 if (item.Title === fullList[_j].Title && i !== _j) {
@@ -359,7 +372,6 @@ $(document).ready(function () {
             step: 1,
             margin: 10,
             behaviour: 'snap',
-            tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })],
             connect: true,
             range: {
                 'min': 0,
@@ -371,7 +383,6 @@ $(document).ready(function () {
             step: 1,
             margin: 10,
             behaviour: 'snap',
-            tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })],
             connect: true,
             range: {
                 'min': 0,
@@ -383,7 +394,6 @@ $(document).ready(function () {
             step: 1,
             margin: 10,
             behaviour: 'snap',
-            tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })],
             connect: true,
             range: {
                 'min': 0,
@@ -395,7 +405,6 @@ $(document).ready(function () {
             step: 1,
             margin: 1,
             behaviour: 'snap',
-            tooltips: [wNumb({ decimals: 0 }), wNumb({ decimals: 0 })],
             connect: true,
             range: {
                 'min': 1900,
@@ -410,6 +419,11 @@ $(document).ready(function () {
                 tomatometer: tomatoMeterSlider.noUiSlider.get(),
                 year: yearSlider.noUiSlider.get()
             };
+
+            $('.slider-label#imdb .slider-range').text(Math.floor(filters.imdb[0]) + ' - ' + Math.floor(filters.imdb[1]));
+            $('.slider-label#metacritic .slider-range').text(Math.floor(filters.metacritic[0]) + ' - ' + Math.floor(filters.metacritic[1]));
+            $('.slider-label#tomatometer .slider-range').text(Math.floor(filters.tomatometer[0]) + ' - ' + Math.floor(filters.tomatometer[1]));
+            $('.slider-label#year .slider-range').text(Math.floor(filters.year[0]) + ' - ' + Math.floor(filters.year[1]));
         };
 
         imdbSlider.noUiSlider.on('end', function () {
@@ -437,19 +451,25 @@ $(document).ready(function () {
         var maxLength = 4;
         if (item.Writer.length > maxLength) item.Writer.splice(-(item.Writer.length - maxLength));
         if (item.Director.length > maxLength) item.Director.splice(-(item.Director.length - maxLength));
-        var $newCard = $('<div class="card-information">\n                <div class="card" data-original="' + item.Poster + '" data-genre="' + item.Genre + '" id="' + id + '" style="background-image: url(' + item.Poster + ')">\n                    <div class="card-menu" id="' + id + '">\n                        <div class="info-button" id="' + id + '">information</div>\n                        <div class="card-trailer" id="' + id + '" style="background-image: url(' + playButton + ')"></div>\n                        <div class="ratings">\n                            <img class="imdb-logo" src="' + imdbLogo + '"/><span class="imdb-rating">' + item.imdbRating + '</span>\n                        </div>\n                    </div>\n                </div>\n                </div>');
-        $('.flex-grid').append($newCard).isotope('appended', $newCard);
+        var $newCard = $('<div class="card" data-original="' + item.Poster + '" data-genre="' + item.Genre + '" id="' + id + '" style="height: ' + cardHeight + 'px; width: ' + cardWidth + 'px; background-image: url(' + item.Poster + ';">\n                    <div class="card-menu" id="' + id + '">\n                        <div class="info-button" id="' + id + '">information</div>\n                        <div class="card-trailer" id="' + id + '" style="background-image: url(' + playButton + ')"></div>\n                        <div class="ratings">\n                            <img class="imdb-logo" src="' + imdbLogo + '"/><span class="imdb-rating">' + item.imdbRating + '</span>\n                        </div>\n                    </div>\n                </div>');
+
+        $newCard = $('.flex-grid').append($newCard).isotope('appended', $newCard);
+        var cardMenu = $('.card').find('.card-menu#' + id);
         if (!isNaN(item.Metascore)) {
-            $('.card').find('.card-menu#' + id + ' .ratings').append('<img class="metacritic-logo" src="' + metacriticLogo + '"/><span class="metacritic-rating">' + item.Metascore + '</span>');
-            $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
+            cardMenu.find('.ratings').append('<img class="metacritic-logo" src="' + metacriticLogo + '"/><span class="metacritic-rating">' + item.Metascore + '</span>');
+            cardMenu.find('.imdb-rating').css('margin-right', '1rem');
         }
         if (!isNaN(item.Tomatometer)) {
-            $('.card').find('.card-menu#' + id + ' .ratings').append('<img class="rotten-tomatoes-logo" src="' + rottenTomatoesLogo + '"/><span class="rottentomatoes-rating">' + item.Tomatometer + '</span>');
-            $('.card').find('.card-menu#' + id + ' .imdb-rating').css('margin-right', '1rem');
-            $('.card').find('.card-menu#' + id + ' .metacritic-rating').css('margin-right', '1rem');
+            cardMenu.find('.ratings').append('<img class="rotten-tomatoes-logo" src="' + rottenTomatoesLogo + '"/><span class="rottentomatoes-rating">' + item.Tomatometer + '</span>');
+            cardMenu.find('.imdb-rating').css('margin-right', '1rem');
+            cardMenu.find('.metacritic-rating').css('margin-right', '1rem');
         }
         if ($('.card').height() > $('.card').width()) {
-            $('.card').find('.card-menu#' + id).css('display', 'none');
+            cardMenu.css('display', 'none');
+        }
+
+        for (var i = 0; i < item.Genre; i++) {
+            $('.flex-grid').find('.card#' + id).addClass(i);
         }
     };
 
@@ -529,7 +549,6 @@ $(document).ready(function () {
                     marginLeft: gridMarginLeft + 'px',
                     width: '90%'
                 }, { complete: function complete() {
-
                         calculateCardSize();
                     } }, duration, ease);
             } else {
@@ -547,12 +566,10 @@ $(document).ready(function () {
                 //
                 var widthPercentage = 100 - filtersTranslateLength / $('.container').width() * 100;
                 if (widthPercentage > 100) widthPercentage = 100;
-                console.log(widthPercentage);
                 $('.flex-grid').velocity({
                     marginLeft: filtersTranslateLength + gridMarginLeft + 'px',
                     width: widthPercentage - 10 + '%'
                 }, { complete: function complete() {
-
                         calculateCardSize();
                     } }, duration, ease);
             }
@@ -593,7 +610,6 @@ $(document).ready(function () {
         $('.flex-grid').isotope('reloadItems').isotope({ sortBy: 'original-order' });
         $('.loading').fadeOut();
         numItems += amnt;
-        console.log('i b loadin');
     };
 
     var loadMoreCardsOnScroll = function loadMoreCardsOnScroll() {
